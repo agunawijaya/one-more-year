@@ -24,7 +24,7 @@ test.beforeEach(async ({ page }) => {
 
 test('a full run by mouse ends in a chronicle and returns to the Hall', async ({ page }) => {
   const problems = watchConsole(page);
-  await openHarness(page);
+  await openHarness(page, '#/?sim=pond');
   await page.locator('.almanac-page--right [data-action="begin"]').click();
   await expectView(page, 'plan');
   await finishRun(page, 15);
@@ -51,7 +51,7 @@ test('a full run by mouse ends in a chronicle and returns to the Hall', async ({
 
 test('a full run by keyboard only', async ({ page }) => {
   const problems = watchConsole(page);
-  await openHarness(page);
+  await openHarness(page, '#/?sim=pond');
   await tabTo(page, '.almanac-page--right [data-action="begin"]');
   await page.keyboard.press('Enter');
   await expectView(page, 'plan');
@@ -174,7 +174,7 @@ test('the daily scenario counts its first attempt and shares a numbered string',
 });
 
 test('browser Back leaves a run for the Hall', async ({ page }) => {
-  await openHarness(page);
+  await openHarness(page, '#/?sim=pond');
   await page.locator('.almanac-page--right [data-action="begin"]').click();
   await expectView(page, 'plan');
   await page.goBack();
