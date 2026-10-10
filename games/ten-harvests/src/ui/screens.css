@@ -1,0 +1,883 @@
+/*
+ * Ten Harvests: the screens around the plan (menu, the year turning, the
+ * report, the stele, scenarios, sheets, the teletype, the tour). Everything
+ * lives under .th, like the rest of the game's styles.
+ */
+
+/* ---- screens: the stage behind, the screen's layer in front ------------------------------------- */
+
+.th-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.th-stage > canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.th-layer {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.th[data-screen='plan'] .th-stage,
+.th[data-screen='stele'] .th-stage {
+  display: none;
+}
+
+.th[data-screen='turning'] .th-layer,
+.th[data-screen='report'] .th-layer {
+  pointer-events: none;
+}
+
+.th[data-screen='report'] .th-report,
+.th[data-screen='turning'] .th-skip {
+  pointer-events: auto;
+}
+
+/* ---- buttons ------------------------------------------------------------------------------------- */
+
+.th-secondary,
+.th-quiet {
+  padding: 9px 16px;
+  border-radius: 12px;
+  font-family: var(--th-display);
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.th-secondary {
+  border: 1.5px solid var(--th-ink);
+  background: transparent;
+  color: var(--th-ink);
+}
+
+.th-quiet {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--th-lapis);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.th[data-appearance='dark'] .th-quiet {
+  color: var(--th-accent);
+}
+
+.th-secondary:hover,
+.th-quiet:hover {
+  background: color-mix(in srgb, var(--th-paper-deep) 70%, transparent);
+}
+
+/* ---- the game menu ------------------------------------------------------------------------------ */
+
+.th-menu__card {
+  position: absolute;
+  top: 76px;
+  left: 40px;
+  display: grid;
+  gap: 12px;
+  width: min(480px, calc(100vw - 80px));
+  max-height: calc(100vh - 104px);
+  padding: 26px 26px 20px;
+  overflow: auto;
+}
+
+.th-menu__eyebrow {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-style: italic;
+}
+
+.th-menu__title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.th-menu__title h1 {
+  margin: 0;
+  font-family: var(--th-display);
+  font-size: 2.7rem;
+  font-weight: 680;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.th-menu__emblem {
+  width: 46px;
+  height: 46px;
+  stroke: var(--th-accent);
+  stroke-width: 1.3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.th-menu__tagline {
+  margin: 0;
+  font-family: var(--th-display);
+  font-size: 1.25rem;
+  font-weight: 560;
+}
+
+.th-menu__teaser {
+  margin: 0;
+  color: var(--th-ink-soft);
+}
+
+.th-menu__group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.th-menu__group h2,
+.th-menu__group .th-choice--primary,
+.th-menu__group--runs .th-choice {
+  grid-column: 1 / -1;
+}
+
+.th-menu__group h2 {
+  margin: 4px 0 2px;
+  color: var(--th-ink-soft);
+  font-family: var(--th-display);
+  font-size: 0.82rem;
+  font-weight: 640;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.th-choice {
+  display: grid;
+  align-content: start;
+  gap: 1px;
+  padding: 9px 13px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--th-paper-deep) 45%, transparent);
+  color: var(--th-ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.th-choice strong {
+  font-family: var(--th-display);
+  font-size: 1.08rem;
+  font-weight: 640;
+}
+
+.th-choice span {
+  color: var(--th-ink-soft);
+  font-family: var(--th-text);
+  font-size: 0.92rem;
+  line-height: 1.3;
+}
+
+.th-choice:hover {
+  border-color: var(--th-ink-soft);
+  background: var(--th-paper-deep);
+}
+
+.th-choice--primary {
+  border-color: transparent;
+  background: var(--th-lapis);
+  color: #fffaf0;
+}
+
+.th-choice--primary span {
+  color: rgb(255 250 240 / 0.85);
+}
+
+.th[data-appearance='dark'] .th-choice--primary {
+  background: var(--th-accent);
+  color: #1d1408;
+}
+
+.th[data-appearance='dark'] .th-choice--primary span {
+  color: rgb(29 20 8 / 0.82);
+}
+
+.th-choice--primary:hover {
+  background: color-mix(in srgb, var(--th-lapis) 88%, white);
+}
+
+.th[data-appearance='dark'] .th-choice--primary:hover {
+  background: color-mix(in srgb, var(--th-accent) 88%, white);
+}
+
+.th-menu__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ---- the scribe's report --------------------------------------------------------------------- */
+
+/* Anchored left: the Hall's notices stack at the bottom right and must not cover the report. */
+.th-report {
+  position: absolute;
+  left: 32px;
+  bottom: 22px;
+  display: grid;
+  gap: 12px;
+  width: min(900px, calc(100vw - 460px));
+  max-height: 58vh;
+  padding: 20px 26px 18px;
+  overflow: auto;
+  animation: th-rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes th-rise {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+
+.th-report__head p {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-style: italic;
+}
+
+.th-report__head h2 {
+  margin: 2px 0 0;
+  font-family: var(--th-display);
+  font-size: 1.6rem;
+  font-weight: 640;
+}
+
+.th-report__body {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+.th-report__events {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.th-report__events li {
+  padding-left: 14px;
+  border-left: 3px solid var(--th-paper-edge);
+}
+
+.th-report__events li[data-severity='good'] {
+  border-left-color: var(--th-good);
+}
+
+.th-report__events li[data-severity='warning'] {
+  border-left-color: var(--th-food);
+}
+
+.th-report__events li[data-severity='disaster'] {
+  border-left-color: var(--th-warning);
+}
+
+.th-report__side {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.th-report__signals {
+  display: grid;
+  gap: 4px;
+}
+
+.th-report__signal {
+  display: grid;
+  grid-template-columns: 1fr auto 64px;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.th-report__signal span {
+  color: var(--th-ink-soft);
+}
+
+.th-report__signal b {
+  font-family: var(--th-display);
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-report__signal em {
+  color: var(--th-ink-soft);
+  font-family: var(--th-display);
+  font-style: normal;
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-report__signal em[data-sign='up'] {
+  color: var(--th-good);
+}
+
+.th-report__signal em[data-sign='down'] {
+  color: var(--th-warning);
+}
+
+.th-report__foot .th-primary {
+  white-space: nowrap;
+}
+
+.th-report__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.th-ghost {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-style: italic;
+}
+
+.th-codex-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-right: auto;
+}
+
+.th-codex-line__label {
+  color: var(--th-ink-soft);
+  font-size: 0.92rem;
+  font-style: italic;
+}
+
+.th-codex-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 6px;
+  border: 1px dashed var(--th-accent);
+  border-radius: 999px;
+  font-family: var(--th-display);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.th-codex-chip svg {
+  width: 22px;
+  height: 22px;
+  color: var(--th-lapis);
+}
+
+.th[data-appearance='dark'] .th-codex-chip svg {
+  color: var(--th-accent);
+}
+
+.th-codex-line__summary {
+  color: var(--th-ink-soft);
+  font-size: 0.92rem;
+}
+
+/* ---- the year turns -------------------------------------------------------------------------------- */
+
+.th-skip {
+  position: fixed;
+  right: 28px;
+  bottom: 22px;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--th-paper) 85%, transparent);
+  color: var(--th-ink);
+  font-family: var(--th-mono);
+  font-size: 0.85rem;
+}
+
+.th-fade {
+  position: fixed;
+  inset: 0;
+  background: var(--th-stage);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- the stele and the dusk ------------------------------------------------------------------------- */
+
+.th-stele-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.th-stele-stage > canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.th-stele-panel,
+.th-dusk {
+  position: absolute;
+  left: 40px;
+  bottom: 36px;
+  display: grid;
+  gap: 8px;
+  width: min(440px, calc(100vw - 80px));
+  padding: 22px 24px 20px;
+  animation: th-rise-left 0.6s ease;
+}
+
+@keyframes th-rise-left {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+.th-stele-panel h1,
+.th-dusk h1 {
+  margin: 0;
+  font-family: var(--th-display);
+  font-size: 2rem;
+  font-weight: 680;
+  line-height: 1.1;
+}
+
+.th-stele-panel p,
+.th-dusk p {
+  margin: 0;
+}
+
+.th-stele-panel__eyebrow {
+  color: var(--th-ink-soft);
+  font-style: italic;
+}
+
+.th-stele-panel__epithet {
+  font-family: var(--th-display);
+  font-size: 1.1rem;
+  font-weight: 560;
+}
+
+.th-stele-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* ---- scenarios -------------------------------------------------------------------------------------- */
+
+.th-scenarios {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: safe center;
+  gap: 18px;
+  padding: 84px 48px 28px;
+  overflow: auto;
+  background: color-mix(in srgb, var(--th-stage) 72%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.th-scenarios__head {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.th-scenarios__head h1 {
+  margin: 0;
+  font-family: var(--th-display);
+  font-size: 2.4rem;
+}
+
+.th-scenarios__head p {
+  margin: 0;
+  color: var(--th-ink-soft);
+}
+
+.th-scenarios__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.th-scenario {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  padding: 0;
+  font: inherit;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 16px;
+  background: var(--th-paper);
+  color: var(--th-ink);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 10px 26px var(--th-shadow);
+}
+
+.th-scenario:hover {
+  border-color: var(--th-ink-soft);
+  transform: translateY(-2px);
+}
+
+.th-scenario__picture {
+  display: block;
+  width: 100%;
+  aspect-ratio: 420 / 200;
+  object-fit: cover;
+  background: var(--th-paper-deep);
+}
+
+.th-scenario__text {
+  display: grid;
+  gap: 2px;
+  padding: 12px 16px 14px;
+}
+
+.th-scenario__text strong {
+  font-family: var(--th-display);
+  font-size: 1.2rem;
+}
+
+.th-scenario__text > span {
+  font-family: var(--th-text);
+  line-height: 1.3;
+}
+
+.th-scenario__meta {
+  color: var(--th-ink-soft);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+@media (max-height: 800px) {
+  .th-scenarios {
+    padding-top: 76px;
+    gap: 12px;
+  }
+
+  .th-scenarios__grid {
+    gap: 12px;
+  }
+
+  .th-scenario__picture {
+    aspect-ratio: 420 / 150;
+  }
+
+  .th-scenario__text {
+    padding: 8px 14px 10px;
+  }
+}
+
+/* ---- sheets: the Codex and the options ---------------------------------------------------------- */
+
+.th-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(20 14 6 / 0.45);
+}
+
+.th-sheet {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(820px, 100%);
+  max-height: 86vh;
+  padding: 20px 24px;
+}
+
+.th-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.th-sheet__head h2 {
+  margin: 0;
+  font-family: var(--th-display);
+  font-size: 1.6rem;
+}
+
+.th-sheet__body {
+  display: grid;
+  gap: 14px;
+  overflow: auto;
+  padding: 6px 2px;
+}
+
+.th-sheet__lead {
+  margin: 0;
+  color: var(--th-ink-soft);
+}
+
+.th-codex {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.th-codex__entry {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 14px;
+}
+
+.th-codex__entry h3 {
+  margin: 0;
+  font-family: var(--th-display);
+}
+
+.th-codex__entry p {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+}
+
+.th-codex__art svg {
+  width: 56px;
+  height: 56px;
+  color: var(--th-lapis);
+}
+
+.th[data-appearance='dark'] .th-codex__art svg {
+  color: var(--th-accent);
+}
+
+.th-codex__art--hidden {
+  opacity: 0.25;
+  filter: blur(1px);
+}
+
+.th-codex__tendency,
+.th-codex__locked {
+  color: var(--th-ink-soft);
+}
+
+.th-options__group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.th-options__group legend {
+  margin-bottom: 6px;
+  font-family: var(--th-display);
+  font-weight: 640;
+}
+
+.th-options__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.th-options__choice,
+.th-options__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.th-options__note {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-size: 0.95rem;
+}
+
+/* ---- the teletype -------------------------------------------------------------------------------- */
+
+.th-teletype {
+  position: relative;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px 34px;
+  border-radius: 6px;
+  /* Continuous fanfold paper: faint green bars every two lines, sprocket holes down both edges. */
+  background:
+    radial-gradient(circle at 12px 12px, var(--th-stage) 0 4px, transparent 5px) left top / 24px
+      24px repeat-y,
+    radial-gradient(circle at 12px 12px, var(--th-stage) 0 4px, transparent 5px) right top / 24px
+      24px repeat-y,
+    repeating-linear-gradient(180deg, #e3efd9 0 3em, #f7faf1 3em 6em);
+  color: #22261d;
+  font-family: var(--th-mono);
+  font-size: 0.95rem;
+  line-height: 1.5em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+}
+
+.th[data-appearance='dark'] .th-teletype {
+  background:
+    radial-gradient(circle at 12px 12px, var(--th-stage) 0 4px, transparent 5px) left top / 24px
+      24px repeat-y,
+    radial-gradient(circle at 12px 12px, var(--th-stage) 0 4px, transparent 5px) right top / 24px
+      24px repeat-y,
+    repeating-linear-gradient(180deg, #c5d0bb 0 3em, #d6ddcb 3em 6em);
+}
+
+.th-paper__line {
+  min-height: 1.5em;
+  white-space: pre-wrap;
+}
+
+.th-paper__line b {
+  font-weight: 700;
+}
+
+.th-paper__ask {
+  display: flex;
+  gap: 8px;
+}
+
+.th-paper__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  border-bottom: 2px solid #22261d;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: uppercase;
+}
+
+.th-paper__input:focus-visible {
+  outline: 2px solid var(--th-focus);
+}
+
+.th-plan--teletype {
+  grid-template-columns: minmax(340px, 4fr) minmax(50%, 8fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.th-plan--teletype > .th-dock {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+  min-height: 0;
+  padding: 12px 14px 14px;
+}
+
+.th-plan--teletype > .th-diorama {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.th-plan--teletype > .th-strip {
+  grid-row: 3;
+}
+
+.th-console {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  display: grid;
+  place-items: center;
+  background: rgb(20 14 6 / 0.4);
+}
+
+.th-console__frame {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+  width: min(680px, calc(100vw - 48px));
+  height: min(620px, calc(100vh - 80px));
+  padding: 16px;
+}
+
+.th-console__hint {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-style: italic;
+}
+
+/* ---- the field tip, the tour -------------------------------------------------------------------- */
+
+.th-field-tip {
+  position: absolute;
+  z-index: 3;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--th-ink);
+  color: var(--th-paper);
+  font-size: 0.9rem;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.th-coach-ring {
+  position: absolute;
+  z-index: 15;
+  border: 3px solid var(--th-accent);
+  border-radius: 18px;
+  box-shadow: 0 0 0 9999px rgb(20 14 6 / 0.32);
+  pointer-events: none;
+  transition: all 0.35s ease;
+}
+
+.th-coach {
+  position: absolute;
+  z-index: 16;
+  display: grid;
+  gap: 6px;
+  width: 360px;
+  padding: 16px 18px;
+  transition:
+    left 0.35s ease,
+    top 0.35s ease;
+}
+
+.th-coach strong {
+  font-family: var(--th-display);
+  font-size: 1.2rem;
+}
+
+.th-coach p {
+  margin: 0;
+}
+
+.th-coach__count {
+  color: var(--th-ink-soft);
+  font-size: 0.85rem;
+}
+
+.th-coach__actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-report,
+  .th-stele-panel,
+  .th-dusk {
+    animation: none;
+  }
+
+  .th-coach,
+  .th-coach-ring {
+    transition: none;
+  }
+}

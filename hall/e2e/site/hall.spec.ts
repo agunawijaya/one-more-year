@@ -1,8 +1,9 @@
 // The built Hall as players get it (vite preview on 5479): every theme in
 // light and dark, live theme and appearance changes, the OS colour scheme on
 // System, keyboard-only navigation to a world's detail, and browser Back.
-// The build has no playable simulation yet, so the worlds here are the two
-// planned ones; the full turn loop is covered by the harness suite.
+// The worlds here are the two in the catalog (Ten Harvests, playable, and a
+// planned one); the full turn loop is covered by the harness suite and by
+// each simulation's own suite.
 import { expect, test, type Page } from '@playwright/test';
 import {
   APPEARANCES,

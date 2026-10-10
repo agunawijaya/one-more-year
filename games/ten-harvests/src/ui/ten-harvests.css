@@ -1,0 +1,1042 @@
+/*
+ * Ten Harvests: every style lives under .th, so nothing leaks into the Hall.
+ *
+ * Two designed looks:
+ *   light  Noon on the Euphrates: warm clay paper, lapis ink, terracotta warnings
+ *   dark   A Thousand Lamps: dark clay, ivory text, amber highlights, lapis outlines
+ *
+ * Fonts are the Hall's self-hosted families: Fraunces for headings and
+ * figures, EB Garamond for reading text.
+ */
+
+.th {
+  --th-paper: #f1e3c6;
+  --th-paper-deep: #e6d2ab;
+  --th-paper-edge: #c9ab78;
+  --th-ink: #2b2014;
+  --th-ink-soft: #5c4a33;
+  --th-lapis: #23458f;
+  --th-lapis-soft: #4a69b0;
+  --th-accent: #23458f;
+  --th-warning: #a8431f;
+  --th-good: #3f6b25;
+  --th-land: #d9694f;
+  --th-food: #e09a2e;
+  --th-seed: #5e9440;
+  --th-keep: #c8b38c;
+  --th-keep-ink: #463822;
+  --th-focus: #23458f;
+  --th-shadow: rgb(70 45 15 / 0.22);
+  --th-stage: #e9d7b3;
+  --th-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --th-text: 'EB Garamond Variable', 'EB Garamond', Georgia, serif;
+  --th-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace;
+
+  position: relative;
+  min-height: 100vh;
+  color: var(--th-ink);
+  background: var(--th-stage);
+  font-family: var(--th-text);
+  font-size: 17px;
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+}
+
+.th[data-appearance='dark'] {
+  --th-paper: #2b231d;
+  --th-paper-deep: #221b16;
+  --th-paper-edge: #4b3c2f;
+  --th-ink: #f3ead8;
+  --th-ink-soft: #c9bba2;
+  --th-lapis: #8fa8ff;
+  --th-lapis-soft: #6f86d8;
+  --th-accent: #f0b54a;
+  --th-warning: #ff9a7a;
+  --th-good: #a7d98a;
+  --th-land: #ff8f74;
+  --th-food: #f3b64c;
+  --th-seed: #8fcf6e;
+  --th-keep: #5a4c40;
+  --th-keep-ink: #d8c8ae;
+  --th-focus: #f0b54a;
+  --th-shadow: rgb(0 0 0 / 0.45);
+  --th-stage: #11132a;
+}
+
+.th *,
+.th *::before,
+.th *::after {
+  box-sizing: border-box;
+}
+
+.th [hidden] {
+  display: none !important;
+}
+
+.th :focus {
+  outline: none;
+}
+
+.th :focus-visible {
+  outline: 3px solid var(--th-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.th .tabular,
+.th .th-figure {
+  font-family: var(--th-display);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ---- clay surfaces ---------------------------------------------------------- */
+
+.th-clay {
+  position: relative;
+  background-color: var(--th-paper);
+  background-image:
+    radial-gradient(120% 90% at 30% 0%, rgb(255 255 255 / 0.28), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.12 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 18px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    inset 0 -3px 0 rgb(0 0 0 / 0.06),
+    0 10px 28px var(--th-shadow);
+}
+
+.th[data-appearance='dark'] .th-clay {
+  background-image:
+    radial-gradient(120% 90% at 30% 0%, rgb(255 210 140 / 0.06), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.85 0 0 0 0 0.6 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  box-shadow:
+    inset 0 1px 0 rgb(255 230 190 / 0.07),
+    0 0 0 1px rgb(143 168 255 / 0.18),
+    0 12px 30px var(--th-shadow);
+}
+
+/* ---- the plan screen grid ------------------------------------------------------ */
+
+.th-plan {
+  display: grid;
+  grid-template-columns: minmax(270px, 3fr) minmax(50%, 6fr) minmax(270px, 3fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 14px 16px;
+  height: 100vh;
+  padding: 12px 16px 14px;
+}
+
+.th-plan > .th-topbar {
+  grid-column: 1 / -1;
+}
+
+.th-plan > .th-tablet {
+  grid-column: 1;
+  grid-row: 2 / span 2;
+}
+
+.th-plan > .th-diorama {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.th-plan > .th-budget {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.th-plan > .th-ledger {
+  grid-column: 3;
+  grid-row: 2 / span 2;
+}
+
+.th-plan > .th-strip {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+
+/* ---- the top bar ------------------------------------------------------------------ */
+
+.th-topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  min-height: 52px;
+  /* The Hall draws its pause button at the top right; leave it room. */
+  padding-right: 168px;
+}
+
+.th-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.th-title svg {
+  width: 30px;
+  height: 30px;
+  stroke: var(--th-accent);
+  stroke-width: 1.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.th-title strong {
+  font-family: var(--th-display);
+  font-size: 1.32rem;
+  font-weight: 640;
+  letter-spacing: 0.01em;
+}
+
+.th-title span {
+  color: var(--th-ink-soft);
+  font-style: italic;
+}
+
+.th-year {
+  font-family: var(--th-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-year small {
+  display: block;
+  margin-top: -2px;
+  color: var(--th-ink-soft);
+  font-family: var(--th-text);
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.th-signals {
+  display: flex;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.th-signal {
+  display: grid;
+  justify-items: end;
+  line-height: 1.05;
+}
+
+.th-signal b {
+  font-family: var(--th-display);
+  font-size: 1.3rem;
+  font-weight: 620;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-signal span {
+  color: var(--th-ink-soft);
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ---- the diorama frame --------------------------------------------------------------- */
+
+.th-diorama {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--th-paper-edge);
+  box-shadow: 0 14px 34px var(--th-shadow);
+  background: #d8c39a;
+}
+
+.th[data-appearance='dark'] .th-diorama {
+  background: #0d1230;
+  box-shadow:
+    0 0 0 1px rgb(143 168 255 / 0.2),
+    0 14px 34px var(--th-shadow);
+}
+
+.th-diorama > canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- panels: the decree tablet and the honest ledger ---------------------------------------- */
+
+.th-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  padding: 18px 18px 16px;
+  overflow: auto;
+}
+
+.th-panel h2 {
+  margin: 0;
+  font-family: var(--th-display);
+  font-size: 1.3rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.th-panel h2 small {
+  display: block;
+  color: var(--th-ink-soft);
+  font-family: var(--th-text);
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.th-rule {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--th-paper-edge) 12%,
+    var(--th-paper-edge) 88%,
+    transparent
+  );
+}
+
+.th-decision {
+  display: grid;
+  gap: 6px;
+}
+
+.th-decision__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.th-decision__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--th-display);
+  font-size: 0.95rem;
+  font-weight: 640;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.th-decision__name i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
+}
+
+.th-decision__name kbd {
+  padding: 0 5px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 4px;
+  color: var(--th-ink-soft);
+  font-family: var(--th-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+}
+
+.th-decision__note {
+  color: var(--th-ink-soft);
+  font-size: 0.95rem;
+}
+
+.th-stepper {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.th-stepper button {
+  min-width: 40px;
+  padding: 6px 6px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--th-paper-deep) 70%, transparent);
+  color: var(--th-ink);
+  font-family: var(--th-display);
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums lining-nums;
+  cursor: pointer;
+}
+
+.th-stepper button:hover {
+  background: var(--th-paper-deep);
+  border-color: var(--th-ink-soft);
+}
+
+.th-stepper input {
+  width: 100%;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 10px;
+  background: color-mix(in srgb, white 35%, var(--th-paper));
+  color: var(--th-ink);
+  font-family: var(--th-display);
+  font-size: 1.45rem;
+  font-weight: 620;
+  text-align: center;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th[data-appearance='dark'] .th-stepper input {
+  background: #1c1612;
+}
+
+.th-stepper input[aria-invalid='true'] {
+  border-color: var(--th-warning);
+}
+
+.th-decision__result {
+  font-size: 1.02rem;
+}
+
+.th-decision__result b {
+  font-family: var(--th-display);
+  font-weight: 620;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-limits {
+  position: relative;
+  height: 22px;
+  margin-top: 2px;
+}
+
+.th-limits__track {
+  position: absolute;
+  inset: 9px 0 auto;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--th-paper-edge);
+}
+
+.th-limits__fill {
+  position: absolute;
+  inset: 9px auto auto 0;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--th-seed);
+}
+
+.th-limits__mark {
+  position: absolute;
+  top: 3px;
+  width: 2px;
+  height: 16px;
+  background: var(--th-ink-soft);
+}
+
+.th-limits__mark span {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--th-ink-soft);
+  font-size: 0.72rem;
+}
+
+.th-limits__mark[data-edge='end'] span {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.th-last {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--th-paper-deep) 65%, transparent);
+  font-size: 0.95rem;
+}
+
+.th-last strong {
+  font-family: var(--th-display);
+  font-size: 0.82rem;
+  font-weight: 640;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--th-ink-soft);
+}
+
+.th-last ul {
+  display: grid;
+  gap: 2px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.th-scribe {
+  margin: 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--th-accent);
+  color: var(--th-ink);
+  font-style: italic;
+}
+
+.th-issue {
+  margin: 0;
+  color: var(--th-warning);
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.th-shake {
+  animation: th-shake 0.32s ease;
+}
+
+@keyframes th-shake {
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+/* The decree's button stays in reach: when the tablet scrolls, it rides along at the bottom. */
+.th-commit {
+  position: sticky;
+  bottom: -16px;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  margin: auto -18px -16px;
+  padding: 14px 18px 14px;
+  border-radius: 0 0 18px 18px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--th-paper) 0%, transparent),
+    var(--th-paper) 14px
+  );
+}
+
+.th-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--th-lapis);
+  color: #fffaf0;
+  font-family: var(--th-display);
+  font-size: 1.2rem;
+  font-weight: 640;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.25),
+    0 6px 16px rgb(35 69 143 / 0.35);
+}
+
+.th[data-appearance='dark'] .th-primary {
+  background: var(--th-accent);
+  color: #1d1408;
+  box-shadow: 0 6px 18px rgb(240 181 74 / 0.25);
+}
+
+.th-primary kbd {
+  padding: 1px 7px;
+  border: 1px solid rgb(255 255 255 / 0.45);
+  border-radius: 5px;
+  font-family: var(--th-mono);
+  font-size: 0.76rem;
+}
+
+.th[data-appearance='dark'] .th-primary kbd {
+  border-color: rgb(0 0 0 / 0.35);
+}
+
+.th-primary[data-warning='true'] {
+  background: var(--th-warning);
+}
+
+/* A refused decree: the button stays in place, plainly not ready, and the reason sits above it. */
+.th .th-primary:disabled,
+.th[data-appearance='dark'] .th-primary:disabled {
+  background: var(--th-paper-deep);
+  color: var(--th-ink-soft);
+  box-shadow: inset 0 0 0 1.5px var(--th-paper-edge);
+  cursor: not-allowed;
+}
+
+.th .th-primary:disabled kbd {
+  border-color: var(--th-paper-edge);
+}
+
+.th-commit p {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-size: 0.88rem;
+  font-style: italic;
+  text-align: center;
+}
+
+/* The refusal shares the commit area with the italic note, but reads as a warning. */
+.th-commit .th-issue {
+  color: var(--th-warning);
+  font-style: normal;
+  text-align: left;
+}
+
+/* ---- the honest ledger ----------------------------------------------------------------------- */
+
+.th-ledger dl {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto;
+  gap: 4px 10px;
+  margin: 0;
+}
+
+.th-ledger dt {
+  color: var(--th-ink-soft);
+}
+
+.th-ledger dd {
+  margin: 0;
+  font-family: var(--th-display);
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-line {
+  display: grid;
+  gap: 3px;
+}
+
+.th-line__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.th-line__head strong {
+  font-family: var(--th-display);
+  font-size: 0.92rem;
+  font-weight: 640;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.th-line__head span {
+  font-family: var(--th-display);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-line__kind {
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 1px solid var(--th-paper-edge);
+  border-radius: 999px;
+  color: var(--th-ink-soft);
+  font-family: var(--th-text);
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  vertical-align: 2px;
+}
+
+.th-line p {
+  margin: 0;
+  color: var(--th-ink-soft);
+  font-size: 0.95rem;
+}
+
+.th-odds {
+  display: grid;
+  grid-template-columns: repeat(var(--faces, 5), 1fr);
+  align-items: end;
+  gap: 4px;
+  height: 64px;
+  padding-top: 4px;
+}
+
+.th-odds__bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  height: 100%;
+}
+
+.th-odds__bar i {
+  display: block;
+  border-radius: 4px 4px 1px 1px;
+  background: linear-gradient(
+    180deg,
+    var(--th-food),
+    color-mix(in srgb, var(--th-food) 60%, var(--th-ink))
+  );
+}
+
+.th-odds__bar span {
+  height: 14px;
+  color: var(--th-ink-soft);
+  font-family: var(--th-display);
+  font-size: 0.72rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-warning-line {
+  padding: 8px 10px;
+  border-left: 3px solid var(--th-warning);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--th-warning) 12%, transparent);
+  color: var(--th-warning);
+  font-weight: 600;
+}
+
+/* ---- the grain budget bar --------------------------------------------------------------------- */
+
+.th-budget {
+  display: grid;
+  gap: 8px;
+  padding: 12px 18px 14px;
+}
+
+.th-budget__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.th-budget__head strong {
+  font-family: var(--th-display);
+  font-size: 1.02rem;
+  font-weight: 640;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.th-budget__head span {
+  color: var(--th-ink-soft);
+}
+
+.th-bar {
+  position: relative;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--th-keep);
+  box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.18);
+  touch-action: none;
+}
+
+.th-bar__segment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #1f160c;
+  font-family: var(--th-display);
+  font-size: 0.86rem;
+  font-weight: 640;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums lining-nums;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.08) 0 2px,
+    transparent 2px 9px
+  );
+}
+
+.th-bar__segment[data-use='food'] {
+  background-color: var(--th-food);
+  border-radius: 12px 0 0 12px;
+}
+
+.th-bar__segment[data-use='land'] {
+  background-color: var(--th-land);
+}
+
+.th-bar__segment[data-use='seed'] {
+  background-color: var(--th-seed);
+}
+
+.th-bar__segment[data-use='keep'] {
+  background: transparent;
+  color: var(--th-keep-ink);
+  border-radius: 0 12px 12px 0;
+}
+
+/* The decree asks for more than the store holds: the bar runs on past the store's end, hatched. */
+.th-bar__over {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  border-left: 2px solid var(--th-warning);
+  border-radius: 0 12px 12px 0;
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--th-warning) 55%, transparent) 0 6px,
+    color-mix(in srgb, var(--th-warning) 22%, transparent) 6px 12px
+  );
+  pointer-events: none;
+}
+
+.th-budget__head [data-short='true'],
+.th-bar__legend b[data-short='true'] {
+  color: var(--th-warning);
+}
+
+.th-bar__handle {
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  width: 22px;
+  margin-left: -11px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: ew-resize;
+  z-index: 2;
+}
+
+.th-bar__handle::before {
+  content: '';
+  position: absolute;
+  inset: 0 7px;
+  border-radius: 6px;
+  background: var(--th-paper);
+  box-shadow:
+    0 0 0 2px var(--th-ink),
+    0 3px 8px var(--th-shadow);
+}
+
+.th-bar__handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background: var(--th-ink-soft);
+  box-shadow:
+    -3px 0 0 var(--th-ink-soft),
+    3px 0 0 var(--th-ink-soft);
+}
+
+.th-bar__handle[data-dragging='true']::before {
+  box-shadow:
+    0 0 0 3px var(--th-accent),
+    0 6px 16px var(--th-shadow);
+}
+
+.th-bar__tip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  z-index: 3;
+  padding: 7px 11px;
+  border-radius: 10px;
+  background: var(--th-ink);
+  color: var(--th-paper);
+  font-size: 0.95rem;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 8px 20px var(--th-shadow);
+}
+
+.th-bar__tip b {
+  font-family: var(--th-display);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-bar__tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  border: 7px solid transparent;
+  border-top-color: var(--th-ink);
+  transform: translateX(-50%);
+}
+
+.th-bar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  color: var(--th-ink-soft);
+  font-size: 0.92rem;
+}
+
+.th-bar__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.th-bar__legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--swatch);
+}
+
+.th-bar__legend b {
+  color: var(--th-ink);
+  font-family: var(--th-display);
+  font-weight: 620;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ---- the ten-year strip ---------------------------------------------------------------------------- */
+
+.th-strip {
+  display: grid;
+  grid-template-columns: repeat(var(--years, 10), minmax(0, 1fr));
+  gap: 8px;
+}
+
+.th-strip__year {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 6px 12px;
+  border: 1px dashed var(--th-paper-edge);
+  border-radius: 12px;
+  color: var(--th-ink-soft);
+  font-size: 0.9rem;
+}
+
+.th-strip__year[data-state='past'] {
+  border-style: solid;
+  background: var(--th-paper);
+  color: var(--th-ink);
+}
+
+.th-strip__year[data-state='now'] {
+  border: 2px solid var(--th-accent);
+  background: var(--th-paper);
+  color: var(--th-ink);
+  box-shadow: 0 4px 14px var(--th-shadow);
+}
+
+.th-strip__year b {
+  font-family: var(--th-display);
+  font-weight: 640;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.th-strip__glyph {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* ---- smaller screens: the panels narrow, the diorama keeps half the width ---------------------- */
+
+@media (max-width: 1500px) {
+  .th {
+    font-size: 15px;
+  }
+
+  .th-plan {
+    gap: 10px 12px;
+    padding: 10px 12px 10px;
+  }
+
+  .th-panel {
+    padding: 14px 14px 12px;
+    gap: 10px;
+  }
+
+  .th-commit {
+    bottom: -12px;
+    margin: auto -14px -12px;
+    padding: 12px 14px 10px;
+  }
+
+  .th-stepper button {
+    min-width: 32px;
+    font-size: 0.8rem;
+  }
+
+  .th-stepper input {
+    font-size: 1.2rem;
+  }
+
+  .th-odds {
+    height: 50px;
+  }
+
+  .th-strip__year {
+    min-height: 38px;
+    padding: 4px 8px;
+  }
+
+  .th-year {
+    font-size: 1.3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-shake {
+    animation: none;
+  }
+}
+
+/* ---- the year's captions over the cinematic ------------------------------------------------------ */
+
+.th-caption {
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 420px;
+  padding: 14px 28px 16px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--th-paper) 92%, transparent);
+  border: 1px solid var(--th-paper-edge);
+  box-shadow: 0 12px 30px var(--th-shadow);
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.th-caption span {
+  color: var(--th-ink-soft);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.th-caption strong {
+  font-family: var(--th-display);
+  font-size: 1.6rem;
+  font-weight: 620;
+}
+
+.th-caption b {
+  color: var(--th-accent);
+  font-family: var(--th-display);
+  font-size: 2.1rem;
+  font-weight: 680;
+  font-variant-numeric: tabular-nums lining-nums;
+}

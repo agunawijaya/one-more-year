@@ -175,6 +175,7 @@ export function createStage(deps: StageDeps): Stage {
       navigate: (to) => {
         if (to === 'hall') void leave().then((left) => left && deps.goHall());
         else if (to === 'game-menu') instance?.gameMenu();
+        else if ('results' in to) deps.showResults(to.results);
         else void open(id, to.launch);
       },
     };

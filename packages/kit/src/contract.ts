@@ -137,8 +137,12 @@ export interface RunReport {
   presentation: 'hall' | 'game';
 }
 
-/** Where the simulation asks the Hall to go. */
-export type Destination = 'game-menu' | 'hall' | { launch: Launch };
+/**
+ * Where the simulation asks the Hall to go. `{ results }` hands a finished
+ * run over to the Hall's chronicle page, after a simulation that reported
+ * with presentation 'game' has shown its own end screen (ADR-0008).
+ */
+export type Destination = 'game-menu' | 'hall' | { launch: Launch } | { results: string };
 
 export interface SimAudio {
   play(cue: CueName | (string & {})): void;

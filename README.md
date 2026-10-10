@@ -20,10 +20,10 @@ are not emulators or ports; every model is rebuilt from scratch, in new code and
 
 <!-- sims:start -->
 
-| World            | In one line                                                     | Domain     | A run                   | Players | After                              | Status         |
-| ---------------- | --------------------------------------------------------------- | ---------- | ----------------------- | ------- | ---------------------------------- | -------------- |
-| Ten Harvests     | Ten years, one granary, and a whole city counting on you.       | governance | 10 years · 10–20 min    | 1P      | the 1968 grain-and-land simulation | In preparation |
-| Crown of Florins | Grow a small city-state into a crown before your years run out. | governance | 20–45 years · 30–90 min | 1–6P    | the 1978 city-state simulation     | In preparation |
+| World                                            | In one line                                                     | Domain     | A run                   | Players | After                              | Status         |
+| ------------------------------------------------ | --------------------------------------------------------------- | ---------- | ----------------------- | ------- | ---------------------------------- | -------------- |
+| [Ten Harvests](games/ten-harvests/docs/ABOUT.md) | Ten years. Three numbers. One river.                            | governance | 10–30 years · 10–20 min | 1P      | the 1968 grain-and-land simulation | Playable       |
+| Crown of Florins                                 | Grow a small city-state into a crown before your years run out. | governance | 20–45 years · 30–90 min | 1–6P    | the 1978 city-state simulation     | In preparation |
 
 <!-- sims:end -->
 

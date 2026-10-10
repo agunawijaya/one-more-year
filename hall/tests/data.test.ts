@@ -85,7 +85,7 @@ describe('registry', () => {
   it('keeps the provisional titles in the manifests only', () => {
     expect(TEN_HARVESTS).toMatchObject({
       title: 'Ten Harvests',
-      status: 'coming-soon',
+      status: 'playable',
       inspiredBy: { originalTitle: 'Hamurabi' },
     });
     expect(CROWN_OF_FLORINS).toMatchObject({
@@ -93,7 +93,7 @@ describe('registry', () => {
       players: '1–6P',
       inspiredBy: { originalTitle: 'Santa Paravia and Fiumaccio' },
     });
-    expect(TEN_HARVESTS.signals.map((signal) => signal.id)).toEqual(['people', 'grain', 'land']);
+    expect(TEN_HARVESTS.signals.map((signal) => signal.id)).toEqual(['people', 'grain', 'acres']);
     expect(CROWN_OF_FLORINS.signals.map((signal) => signal.id)).toEqual([
       'treasury',
       'people',

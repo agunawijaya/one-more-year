@@ -1,9 +1,10 @@
 /**
  * Offline (hard rule 3): the built site never asks the network for anything.
  * This scans hall/dist for absolute http(s) URLs in code and styles. A few
- * URLs are names, not requests (the SVG and XHTML namespaces), and the
- * GitHub links to each simulation's docs are plain anchors the player may
- * choose to follow; those are allowed.
+ * URLs are names, not requests (the SVG and XHTML namespaces), the GitHub
+ * links to each simulation's docs are plain anchors the player may choose to
+ * follow, and one is a citation in a comment inside three.js's shader source
+ * (PMREMGenerator cites the paper its sampling comes from); those are allowed.
  *
  * The end-to-end suite backs this up in a real browser (site/network.spec.ts).
  */
@@ -16,6 +17,7 @@ const ALLOWED = [
   /^http:\/\/www\.w3\.org\//,
   /^https:\/\/github\.com\//,
   /^https:\/\/en\.wikipedia\.org\/wiki\//,
+  /^https:\/\/jcgt\.org\/published\/0007\/04\/01\/$/,
 ];
 const SCANNED = new Set(['.js', '.css', '.html']);
 

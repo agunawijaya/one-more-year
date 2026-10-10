@@ -69,9 +69,9 @@ test('the test-only Pond simulation is not part of the site', async ({ page }) =
 test('a planned world cannot be opened from its address', async ({ page }) => {
   const problems = watchConsole(page);
   await returningVisitor(page);
-  await page.goto('/#/play/ten-harvests?new=standard');
+  await page.goto('/#/play/crown-of-florins?new=standard');
   await expect(page.getByText('This world cannot be opened yet.')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-view', 'hall');
-  await expect(page).toHaveURL(/#\/\?sim=ten-harvests$/);
+  await expect(page).toHaveURL(/#\/\?sim=crown-of-florins$/);
   expect(problems).toEqual([]);
 });

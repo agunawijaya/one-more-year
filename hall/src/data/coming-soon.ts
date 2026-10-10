@@ -6,65 +6,16 @@
  * When a simulation's own prompt creates games/<id>/manifest.ts, that file
  * takes over and the placeholder here is ignored (the registry prefers a
  * discovered manifest with the same id). Titles live only in manifests, so
- * a rename is a one-file change. Both titles below are provisional, as are
- * the taglines, teasers, accents and signals; each simulation's prompt
- * finalises them.
+ * a rename is a one-file change. A built simulation's entry points at its
+ * own manifest, which keeps the catalog order; the other titles are still
+ * provisional, as are their taglines, teasers, accents and signals, until
+ * each simulation's prompt finalises them.
  */
 import type { SimManifest } from '@one-more-year/kit';
+import { manifest as tenHarvests } from '../../../games/ten-harvests/manifest.ts';
 
-export const TEN_HARVESTS: SimManifest = {
-  id: 'ten-harvests',
-  title: 'Ten Harvests',
-  tagline: 'Ten years, one granary, and a whole city counting on you.',
-  teaser:
-    'Feed your people, sow your fields and trade land against grain, one harvest at a time. ' +
-    'Rats, weather and the odd plague never ask permission. Can you hand over a fuller city than the one you were given?',
-  domain: 'governance',
-  turnUnit: 'year',
-  typicalTurns: [10, 10],
-  players: '1P',
-  sessionMinutes: [10, 20],
-  status: 'coming-soon',
-  accent: { light: '#9a4a12', dark: '#e9b660' },
-  // A sheaf of three stalks tied at the waist.
-  emblem:
-    'M12 22V9M12 17C10 14 8.2 11.6 6.6 8.2M12 17C14 14 15.8 11.6 17.4 8.2M9.4 17.4H14.6' +
-    'M12 9C10.6 7.6 10.6 4.6 12 3C13.4 4.6 13.4 7.6 12 9Z' +
-    'M6.6 8.2C5 7.2 4.4 4.4 5.3 2.8C6.9 3.7 7.4 6.4 6.6 8.2Z' +
-    'M17.4 8.2C19 7.2 19.6 4.4 18.7 2.8C17.1 3.7 16.6 6.4 17.4 8.2Z',
-  inspiredBy: {
-    originalTitle: 'Hamurabi',
-    uiTitle: 'the 1968 grain-and-land simulation',
-    year: 1968,
-    credit: 'Doug Dyment; BASIC version by David H. Ahl',
-  },
-  hasDailyScenario: true,
-  scenarios: [],
-  signals: [
-    {
-      id: 'people',
-      label: 'People',
-      unit: { singular: 'person', plural: 'people' },
-      format: 'integer',
-      higherIsBetter: true,
-    },
-    {
-      id: 'grain',
-      label: 'Grain',
-      unit: { singular: 'bushel', plural: 'bushels' },
-      format: 'integer',
-      higherIsBetter: true,
-    },
-    {
-      id: 'land',
-      label: 'Land',
-      unit: { singular: 'acre', plural: 'acres' },
-      format: 'integer',
-      higherIsBetter: true,
-    },
-  ],
-  primarySignal: 'people',
-};
+/** Built: the placeholder is replaced by the simulation's own manifest. */
+export const TEN_HARVESTS: SimManifest = tenHarvests;
 
 export const CROWN_OF_FLORINS: SimManifest = {
   id: 'crown-of-florins',

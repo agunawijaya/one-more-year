@@ -13,5 +13,5 @@ its prompt. This file is excluded from Prettier so parallel sessions never refor
 
 | Simulation | Inspired by | Prompt | Status | Notes |
 |---|---|---|---|---|
-| Ten Harvests | the 1968 grain-and-land simulation | 01 | Not started | Placeholder manifest in `hall/src/data/coming-soon.ts`; ports 4480/5480 |
+| Ten Harvests | the 1968 grain-and-land simulation | 01 | Playable, approved by the owner — 2026-10-10 | three.js city diorama with the year's cinematic, granary bar, Honest Ledger, carved stele; Classic, daily, 6 scenarios, Dynasty, 1978 Ledger on a teletype; 71 unit tests, 19 end-to-end tests (port 5480) plus screenshots and fps (SHOTS=1); kit: results hand-over (ADR-0008); registry entry points at the built manifest; ports 4480/5480 |
 | Crown of Florins *(provisional)* | the 1978 city-state simulation | — | Not started | Placeholder manifest in `hall/src/data/coming-soon.ts`; 1–6 players hot-seat |

@@ -1,0 +1,23 @@
+{
+  "name": "@one-more-year/ten-harvests",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ten Harvests: rule a city on the Euphrates for ten harvests. Inspired by the 1968 grain-and-land simulation.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json && tsc -p e2e/tsconfig.json",
+    "e2e": "playwright test -c e2e/playwright.config.ts",
+    "shots": "cross-env SHOTS=1 playwright test -c e2e/playwright.config.ts --project=shots"
+  },
+  "dependencies": {
+    "@one-more-year/kit": "workspace:*",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/three": "^0.186.0"
+  }
+}
