@@ -1,0 +1,443 @@
+/*
+ * Pond's own styles. A simulation styles only itself: everything here is
+ * under .pond or .pond-scene, and the Hall's themes never reach inside.
+ * Light and dark are both designed (the .pond[data-appearance] blocks).
+ */
+
+/* ---- the scene ------------------------------------------------------------ */
+
+.pond-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.pond-scene__strand {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pond-sway 6s ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+}
+
+.pond-scene[data-style='diorama'] .pond-scene__strand {
+  stroke: var(--good);
+  stroke-width: 2.4;
+}
+
+.pond-scene[data-style='instrument'] .pond-scene__strand {
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.pond-scene__reed {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: pond-sway 8s ease-in-out infinite alternate;
+  animation-delay: var(--sway-delay, 0s);
+}
+
+.pond-scene__swimmer {
+  animation: pond-swim var(--swim-duration, 9s) ease-in-out infinite alternate;
+  animation-delay: var(--swim-delay, 0s);
+}
+
+.pond-scene__body {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.pond-scene[data-style='instrument'] .pond-scene__body {
+  fill: var(--accent);
+  stroke: none;
+}
+
+.pond-scene[data-style='diorama'] .pond-scene__body {
+  fill: var(--warning, #e8873a);
+  stroke: var(--paper);
+  stroke-width: 0.8;
+}
+
+.pond-scene__sun {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.4;
+}
+
+.pond-scene[data-style='diorama'] .pond-scene__sun {
+  fill: var(--glow);
+  stroke: none;
+}
+
+.pond-scene[data-style='instrument'] .pond-scene__sun {
+  stroke: var(--accent);
+}
+
+.pond-scene__ray,
+.pond-scene__rain {
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.pond-scene[data-style='instrument'] .pond-scene__ray,
+.pond-scene[data-style='instrument'] .pond-scene__rain {
+  stroke: var(--accent);
+}
+
+.pond-scene__cloud {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.2;
+}
+
+.pond-scene--still *,
+.pond-scene--still {
+  animation: none !important;
+}
+
+@keyframes pond-swim {
+  from {
+    transform: translateX(-10px);
+  }
+  to {
+    transform: translateX(12px);
+  }
+}
+
+@keyframes pond-sway {
+  from {
+    transform: rotate(-4deg);
+  }
+  to {
+    transform: rotate(4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pond-scene *,
+  .pond-scene {
+    animation: none !important;
+  }
+}
+
+/* ---- the play screens ------------------------------------------------------- */
+
+.pond {
+  --pond-bg: #f3f7f5;
+  --pond-panel: #ffffff;
+  --pond-ink: #13312f;
+  --pond-muted: #4a6662;
+  --pond-line: #c9dad6;
+  --pond-accent: #14706e;
+  --pond-accent-ink: #ffffff;
+  --pond-warning: #8a5300;
+  --pond-error: #a32020;
+  --pond-good: #276b2e;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 72px clamp(16px, 4vw, 48px) 32px;
+  background: var(--pond-bg);
+  color: var(--pond-ink);
+  font-family: 'Nunito Variable', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.pond[data-appearance='dark'] {
+  --pond-bg: #0d1c1c;
+  --pond-panel: #142828;
+  --pond-ink: #e4f2ef;
+  --pond-muted: #9dbbb6;
+  --pond-line: #2c4745;
+  --pond-accent: #5fd3c6;
+  --pond-accent-ink: #062120;
+  --pond-warning: #f0b45c;
+  --pond-error: #ff8f86;
+  --pond-good: #8fd99a;
+}
+
+.pond *:focus-visible {
+  outline: 3px solid var(--pond-accent);
+  outline-offset: 2px;
+}
+
+.pond__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 1fr);
+  gap: 28px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+@media (max-width: 820px) {
+  .pond__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pond__panel {
+  background: var(--pond-panel);
+  border: 1px solid var(--pond-line);
+  border-radius: 14px;
+  padding: 20px 22px;
+}
+
+.pond__eyebrow {
+  margin: 0;
+  color: var(--pond-muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pond h1,
+.pond h2,
+.pond h3 {
+  margin: 0.2em 0 0.4em;
+  line-height: 1.2;
+}
+
+.pond__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.pond__scene {
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  background: var(--pond-panel);
+  border: 1px solid var(--pond-line);
+  padding: 8px;
+}
+
+.pond__signals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0 0;
+}
+
+.pond__signal {
+  border: 1px solid var(--pond-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--pond-panel);
+}
+
+.pond__signal dt {
+  color: var(--pond-muted);
+  font-size: 0.85rem;
+}
+
+.pond__signal dd {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.pond__delta {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--pond-muted);
+}
+
+.pond__field {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.pond__field label {
+  font-weight: 700;
+}
+
+.pond__catch {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.pond__catch input[type='number'] {
+  width: 7em;
+  font: inherit;
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+  padding: 6px 10px;
+  border: 1px solid var(--pond-line);
+  border-radius: 8px;
+  background: var(--pond-bg);
+  color: var(--pond-ink);
+}
+
+.pond__catch input[type='range'] {
+  flex: 1;
+  accent-color: var(--pond-accent);
+}
+
+.pond__presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pond button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid var(--pond-line);
+  background: var(--pond-panel);
+  color: var(--pond-ink);
+  padding: 6px 14px;
+}
+
+.pond button:hover {
+  border-color: var(--pond-accent);
+}
+
+.pond .pond__primary {
+  background: var(--pond-accent);
+  color: var(--pond-accent-ink);
+  border-color: var(--pond-accent);
+  font-weight: 800;
+  padding: 10px 22px;
+  font-size: 1.05rem;
+}
+
+.pond .pond__primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pond__issues {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-height: 1.5em;
+}
+
+.pond__issue--error {
+  color: var(--pond-error);
+  font-weight: 700;
+}
+
+.pond__issue--warning {
+  color: var(--pond-warning);
+}
+
+.pond__forecast {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--pond-accent);
+  background: color-mix(in srgb, var(--pond-accent) 8%, transparent);
+  border-radius: 0 8px 8px 0;
+}
+
+.pond__forecast p {
+  margin: 0.2em 0;
+}
+
+.pond__note {
+  color: var(--pond-muted);
+  font-size: 0.92rem;
+}
+
+.pond__events {
+  margin: 8px 0 16px;
+  padding-left: 1.2em;
+}
+
+.pond__events li {
+  margin: 0.3em 0;
+}
+
+.pond__event--disaster,
+.pond__event--warning {
+  color: var(--pond-warning);
+}
+
+.pond__event--good {
+  color: var(--pond-good);
+}
+
+.pond__codex-card {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px dashed var(--pond-accent);
+  border-radius: 12px;
+}
+
+.pond__codex-card svg {
+  width: 48px;
+  height: 48px;
+  color: var(--pond-accent);
+}
+
+.pond__menu {
+  max-width: 720px;
+  margin: 0 auto;
+  display: grid;
+  gap: 18px;
+}
+
+.pond__menu-scene {
+  aspect-ratio: 16 / 9;
+}
+
+.pond__choices {
+  display: grid;
+  gap: 10px;
+}
+
+.pond__choice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+}
+
+.pond__runs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.pond__tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.omy-handover {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+  background: var(--pond-bg);
+  color: var(--pond-ink);
+}
+
+.omy-handover__ready {
+  background: var(--pond-accent) !important;
+  color: var(--pond-accent-ink) !important;
+  font-weight: 800;
+  padding: 10px 28px !important;
+}

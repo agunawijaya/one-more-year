@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+pnpm-lock.yaml
+prompts/
+docs/media/
+# Parallel simulation sessions each edit one row here; unaligned rows avoid whole-table rewrites.
+docs/PROGRESS.md
+# Agent skill files are the owner's own notes, kept as written.
+.claude/

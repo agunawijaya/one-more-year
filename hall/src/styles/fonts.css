@@ -1,0 +1,14 @@
+/*
+ * Self-hosted typefaces, all under the SIL Open Font License, bundled by
+ * Vite from the @fontsource packages (no request ever leaves the site).
+ * Browsers fetch a face only when a theme first uses it.
+ *
+ * Almanac: EB Garamond. Situation Room: Geist and Geist Mono.
+ * Terrarium: Fraunces (with its soft and wonky axes) and Nunito.
+ */
+@import '@fontsource-variable/eb-garamond/wght.css';
+@import '@fontsource-variable/eb-garamond/wght-italic.css';
+@import '@fontsource-variable/geist/index.css';
+@import '@fontsource-variable/geist-mono/index.css';
+@import '@fontsource-variable/fraunces/full.css';
+@import '@fontsource-variable/nunito/index.css';

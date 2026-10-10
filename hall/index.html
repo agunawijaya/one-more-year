@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-theme="almanac" data-appearance="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>One More Year</title>
+    <meta
+      name="description"
+      content="Run a small world, one year at a time. Modern web simulations inspired by the turn-based classics of the BASIC era."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='7' fill='%231f2a44'/%3E%3Cpath d='M9 23h14' stroke='%23e9c46a' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M16 23v-8' stroke='%23f4ead5' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M16 16c-4 0-6-2.5-6-6 4 0 6 2.5 6 6zM16 14c0-3.5 2-6 6-6 0 3.5-2 6-6 6z' fill='%23f4ead5'/%3E%3C/svg%3E"
+    />
+    <script>
+      // Runs before first paint so the page never flashes the wrong theme or
+      // appearance. It reads the kit's settings envelope directly:
+      // localStorage "omy:settings" holds { v, d: { theme, appearance, textSize, ... } }.
+      (function () {
+        var root = document.documentElement;
+        var settings = {};
+        try {
+          var stored = JSON.parse(localStorage.getItem('omy:settings') || 'null');
+          if (stored && typeof stored.d === 'object' && stored.d) settings = stored.d;
+        } catch (error) {
+          // Private mode or damaged data: the defaults below are fine.
+        }
+        var themes = ['almanac', 'situation-room', 'terrarium'];
+        if (themes.indexOf(settings.theme) !== -1) root.dataset.theme = settings.theme;
+        var preference = settings.appearance;
+        if (preference !== 'light' && preference !== 'dark') {
+          var osDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          preference = osDark ? 'dark' : 'light';
+        }
+        root.dataset.appearance = preference;
+        if (settings.textSize === 115 || settings.textSize === 130) {
+          root.style.fontSize = settings.textSize + '%';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>One More Year needs JavaScript to run its simulations.</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

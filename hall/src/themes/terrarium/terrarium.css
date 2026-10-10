@@ -1,0 +1,916 @@
+/*
+ * Terrarium: small worlds under glass on oak shelves.
+ * Light: a greenhouse at noon. Dark: a firefly night. Colours from tokens.ts;
+ * the dome trim and the planned worlds' plant from the Legacy cosmetic.
+ */
+
+[data-theme='terrarium'] {
+  --font-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --font-text: 'Nunito Variable', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  --font-ui: 'Nunito Variable', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  --font-numbers: 'Nunito Variable', 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  --numerals: 'tnum' 1, 'lnum' 1;
+  --radius: 16px;
+  --radius-small: 10px;
+}
+
+[data-theme='terrarium'] h1,
+[data-theme='terrarium'] h2,
+[data-theme='terrarium'] h3,
+[data-theme='terrarium'] .wordmark,
+[data-theme='terrarium'] .empty__title,
+[data-theme='terrarium'] .library__epithet,
+[data-theme='terrarium'] .chronicle__epithet {
+  font-variation-settings:
+    'SOFT' 100,
+    'WONK' 1,
+    'opsz' 72;
+  font-weight: 560;
+}
+
+/* ---- chrome skin ----------------------------------------------------------------- */
+
+[data-theme='terrarium'] .top-bar {
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+
+[data-theme='terrarium'] .wordmark {
+  font-size: 1.45rem;
+}
+
+[data-theme='terrarium'] .top-bar__theme[aria-pressed='true'] {
+  background: var(--accent);
+}
+
+[data-theme='terrarium'] .button {
+  border-radius: 999px;
+  font-weight: 750;
+  border-width: 1.5px;
+}
+
+[data-theme='terrarium'] .button--primary {
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--accent) 60%, black);
+}
+
+[data-theme='terrarium'] .button--primary:active {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--accent) 60%, black);
+  transform: translateY(2px);
+}
+
+[data-theme='terrarium'] .dialog {
+  border-radius: 24px;
+  border-width: 1.5px;
+}
+
+[data-theme='terrarium'] .page {
+  position: relative;
+}
+
+[data-theme='terrarium'] .hall-main:has(.page) {
+  background:
+    radial-gradient(
+      ellipse 60% 40% at 90% 0%,
+      color-mix(in srgb, var(--leaf) 30%, transparent),
+      transparent 70%
+    ),
+    var(--bg);
+}
+
+[data-theme='terrarium'] .library__card,
+[data-theme='terrarium'] .codex-card,
+[data-theme='terrarium'] .moment,
+[data-theme='terrarium'] .chronicle__chart,
+[data-theme='terrarium'] .legacy__rank,
+[data-theme='terrarium'] .legacy__streak,
+[data-theme='terrarium'] .milestone--unlocked {
+  border-radius: 20px;
+  border-width: 1.5px;
+  box-shadow: 0 6px 0 -2px var(--rule);
+}
+
+[data-theme='terrarium'] .timeline__mark {
+  border-radius: 999px;
+}
+
+[data-theme='terrarium'] .dialog--card {
+  width: min(640px, 100%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--sim-accent, var(--accent)) 10%, var(--surface)),
+    var(--surface) 220px
+  );
+}
+
+[data-theme='terrarium'] .dialog--card .detail__demo {
+  border-radius: 999px 999px 18px 18px;
+  overflow: hidden;
+  background: var(--pane);
+  border: 2px solid var(--glass-edge);
+  margin-bottom: 16px;
+}
+
+/* ---- the glasshouse ---------------------------------------------------------------- */
+
+.terra {
+  position: relative;
+  min-height: calc(100vh - var(--top-bar-height));
+  overflow: hidden;
+  font-family: var(--font-ui);
+}
+
+.terra-glasshouse {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+        90deg,
+        transparent calc(100% - 3px),
+        color-mix(in srgb, var(--surface) 70%, transparent) 0
+      )
+      0 0 / 25% 100%,
+    linear-gradient(
+        transparent calc(100% - 3px),
+        color-mix(in srgb, var(--surface) 70%, transparent) 0
+      )
+      0 0 / 100% 34%,
+    radial-gradient(
+      ellipse 60% 50% at 30% 0%,
+      color-mix(in srgb, white 55%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(180deg, var(--pane), var(--bg) 70%);
+}
+
+[data-appearance='dark'] .terra-glasshouse {
+  background:
+    linear-gradient(
+        90deg,
+        transparent calc(100% - 2px),
+        color-mix(in srgb, var(--moon) 9%, transparent) 0
+      )
+      0 0 / 25% 100%,
+    linear-gradient(transparent calc(100% - 2px), color-mix(in srgb, var(--moon) 9%, transparent) 0)
+      0 0 / 100% 34%,
+    radial-gradient(
+      ellipse 50% 40% at 82% 6%,
+      color-mix(in srgb, var(--moon) 14%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(180deg, #0c2427, var(--bg) 75%);
+}
+
+.terra-moon {
+  display: none;
+}
+
+[data-appearance='dark'] .terra-moon {
+  display: block;
+  position: absolute;
+  top: 3%;
+  right: 34%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    var(--moon),
+    color-mix(in srgb, var(--moon) 70%, #6f8aa0)
+  );
+  box-shadow: 0 0 60px 10px color-mix(in srgb, var(--moon) 18%, transparent);
+  opacity: 0.85;
+}
+
+/* Leaf shadows falling through the roof panes at noon. */
+.terra-leaves {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cg fill='%23284a2a'%3E%3Cpath d='M20 30c40-10 70 10 80 40-30 5-65-10-80-40z'/%3E%3Cpath d='M90 10c30 10 45 40 35 70-25-15-40-40-35-70z'/%3E%3Cpath d='M40 100c35-20 70-10 90 15-30 15-70 10-90-15z'/%3E%3Cpath d='M130 60c35 0 55 25 55 55-30-5-55-25-55-55z'/%3E%3Cpath d='M70 150c30-10 60 0 75 25-30 10-60 0-75-25z'/%3E%3C/g%3E%3C/svg%3E")
+    center / contain no-repeat;
+  opacity: 0.08;
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.terra-leaves--left {
+  left: -120px;
+  top: -80px;
+  transform: rotate(-20deg);
+}
+
+.terra-leaves--right {
+  right: -160px;
+  bottom: -140px;
+  transform: rotate(140deg);
+}
+
+[data-appearance='dark'] .terra-leaves {
+  opacity: 0.3;
+  filter: blur(2px) brightness(0.3);
+}
+
+.terra-fireflies {
+  display: none;
+}
+
+[data-appearance='dark'] .terra-fireflies {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.terra-firefly {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--firefly);
+  box-shadow: 0 0 10px 3px color-mix(in srgb, var(--firefly) 55%, transparent);
+  opacity: 0.75;
+  animation:
+    terra-drift var(--drift) ease-in-out var(--delay) infinite alternate,
+    terra-blink 4.5s ease-in-out var(--delay) infinite;
+}
+
+@keyframes terra-drift {
+  to {
+    transform: translate(60px, -40px);
+  }
+}
+
+@keyframes terra-blink {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.terra-inner {
+  position: relative;
+  width: min(1640px, 100%);
+  margin: 0 auto;
+  padding: clamp(20px, 3.4vh, 44px) var(--gutter) 48px;
+}
+
+.terra-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(16px, 3vh, 36px);
+}
+
+.terra-head__title {
+  margin: 0;
+  font-size: clamp(2.4rem, 3.8vw, 4rem);
+  line-height: 1;
+  color: var(--ink);
+}
+
+.terra-head__line {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 1.15rem;
+}
+
+.terra-head__badges {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.terra-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.terra-badge svg {
+  color: var(--accent);
+}
+
+.terra-badge--brass {
+  cursor: pointer;
+  border-color: color-mix(in srgb, var(--brass) 60%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brass) 18%, var(--surface)),
+    var(--surface)
+  );
+}
+
+.terra-badge__points {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+/* ---- shelves ------------------------------------------------------------------------- */
+
+.terra-shelves {
+  display: grid;
+  gap: clamp(34px, 6vh, 64px);
+}
+
+.terra-shelf {
+  position: relative;
+}
+
+.terra-shelf__row {
+  display: grid;
+  grid-template-columns: repeat(var(--per-shelf, 3), minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 110px);
+  padding: 0 clamp(70px, 8vw, 170px);
+  align-items: end;
+}
+
+.terra-shelf__plank {
+  position: relative;
+  height: 26px;
+  margin-top: -6px;
+  border-radius: 4px;
+  border-bottom: 8px solid var(--oak-dark);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 140px, rgb(0 0 0 / 0.06) 140px 142px),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--oak) 85%, white 15%),
+      var(--oak) 40%,
+      var(--oak-dark)
+    );
+  box-shadow: 0 14px 22px -10px rgb(30 20 8 / 0.45);
+}
+
+.terra-shelf__plank::before,
+.terra-shelf__plank::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  width: 16px;
+  height: 34px;
+  background: var(--oak-dark);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.terra-shelf__plank::before {
+  left: 8%;
+}
+
+.terra-shelf__plank::after {
+  right: 8%;
+  transform: scaleX(-1);
+}
+
+.terra-shelf__labels {
+  display: grid;
+  grid-template-columns: repeat(var(--per-shelf, 3), minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 110px);
+  padding: 0 clamp(70px, 8vw, 170px);
+  min-height: 12px;
+}
+
+/* Pressed-paper labels hanging on threads from the shelf edge. */
+
+/* ---- domes ----------------------------------------------------------------------- */
+
+.terra-dome {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.terra-dome__glass {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.86;
+  padding: 0;
+  border: 2px solid var(--glass-edge);
+  border-bottom: 0;
+  border-radius: 50% 50% 14px 14px / 62% 62% 14px 14px;
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% 95%,
+      color-mix(in srgb, var(--sim-accent) 10%, transparent),
+      transparent 70%
+    ),
+    var(--glass);
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 6px color-mix(in srgb, white 12%, transparent),
+    0 22px 40px -24px rgb(0 0 0 / 0.5);
+  transition:
+    transform 520ms var(--ease),
+    box-shadow 520ms var(--ease);
+  z-index: 1;
+}
+
+[data-appearance='dark'] .terra-dome__glass {
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 80%,
+      color-mix(in srgb, var(--sim-accent) 22%, transparent),
+      transparent 75%
+    ),
+    var(--glass);
+  box-shadow:
+    inset 0 0 0 6px color-mix(in srgb, var(--moon) 5%, transparent),
+    0 0 50px -10px color-mix(in srgb, var(--sim-accent) 30%, transparent),
+    0 22px 40px -24px rgb(0 0 0 / 0.8);
+}
+
+.terra-dome--lifted .terra-dome__glass {
+  transform: translateY(-16px);
+  box-shadow:
+    inset 0 0 0 6px color-mix(in srgb, white 14%, transparent),
+    0 40px 50px -28px rgb(0 0 0 / 0.45);
+}
+
+.terra-dome__world {
+  position: absolute;
+  inset: 14% 5% 2%;
+  display: grid;
+  place-items: end center;
+}
+
+.terra-dome__world > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The curved highlight that makes glass read as glass. */
+.terra-dome__shine {
+  position: absolute;
+  inset: 6% 10% auto auto;
+  width: 34%;
+  height: 52%;
+  border-radius: 50%;
+  border-top: 5px solid color-mix(in srgb, white 70%, transparent);
+  border-right: 3px solid color-mix(in srgb, white 35%, transparent);
+  transform: rotate(18deg);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+[data-appearance='dark'] .terra-dome__shine {
+  border-top-color: color-mix(in srgb, var(--moon) 45%, transparent);
+  border-right-color: color-mix(in srgb, var(--moon) 20%, transparent);
+}
+
+/* Today's worlds wear a ribbon tied on top of the dome. */
+.terra-dome__ribbon {
+  position: absolute;
+  top: 2.5%;
+  left: 50%;
+  width: 46px;
+  height: 22px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle at 50% 50%, var(--sim-accent) 0 6px, transparent 6.5px),
+    conic-gradient(
+      from 225deg at 50% 50%,
+      var(--sim-accent) 0 90deg,
+      transparent 90deg 180deg,
+      var(--sim-accent) 180deg 270deg,
+      transparent 270deg
+    );
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.2));
+}
+
+/* The dome's turned wooden base, with the cosmetic's metal trim around the rim. */
+.terra-dome__base {
+  position: relative;
+  width: 92%;
+  margin-top: -10px;
+  margin-bottom: -2px;
+  padding: 14px 0 12px;
+  display: grid;
+  justify-items: center;
+  border-radius: 50% 50% 14px 14px / 30% 30% 14px 14px;
+  background:
+    linear-gradient(
+      180deg,
+      var(--trim) 0 5px,
+      color-mix(in srgb, var(--trim) 60%, black) 5px 7px,
+      transparent 7px
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--oak) 80%, white 20%) 10%,
+      var(--oak) 40%,
+      var(--oak-dark)
+    );
+  box-shadow:
+    inset 0 -6px 10px rgb(0 0 0 / 0.18),
+    0 10px 18px -12px rgb(0 0 0 / 0.5);
+  z-index: 2;
+}
+
+.terra-dome__plate {
+  padding: 4px 18px;
+  border-radius: 4px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brass) 80%, white 20%),
+    var(--brass)
+  );
+  color: var(--brass-ink);
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.35vw, 1.4rem);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.5),
+    0 1px 2px rgb(0 0 0 / 0.3);
+}
+
+.terra-dome--empty .terra-dome__glass {
+  background:
+    radial-gradient(
+      ellipse 60% 40% at 50% 100%,
+      color-mix(in srgb, var(--leaf) 25%, transparent),
+      transparent 70%
+    ),
+    var(--glass);
+}
+
+.terra-seedling {
+  width: 34%;
+  height: auto;
+  margin-bottom: 2%;
+  color: var(--leaf);
+}
+
+.terra-seedling .terra-leaf {
+  fill: color-mix(in srgb, var(--leaf) 70%, transparent);
+}
+
+.terra-seedling .terra-bloom {
+  fill: var(--sim-accent);
+  stroke: none;
+}
+
+.terra-seedling .terra-pot {
+  fill: var(--terracotta);
+}
+
+.terra-seedling .terra-pot-rim {
+  fill: color-mix(in srgb, var(--terracotta) 80%, black);
+}
+
+/* ---- still growing (runs in progress) ------------------------------------------------- */
+
+.terra-growing {
+  margin-top: clamp(16px, 3vh, 36px);
+}
+
+.terra-section-title {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+/* The pots stand on a low plank drawn behind them; their labels hang below it. */
+.terra-growing__shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0 clamp(20px, 4vw, 80px);
+  display: flex;
+  gap: clamp(16px, 3vw, 48px);
+  align-items: start;
+  background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--oak) 85%, white 15%),
+      var(--oak) 50%,
+      var(--oak-dark)
+    )
+    0 98px / 100% 16px no-repeat;
+}
+
+.terra-growing__item {
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  width: 150px;
+  padding: 0 0 6px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-ui);
+}
+
+.terra-growing__pot {
+  width: 110px;
+  height: auto;
+  margin-bottom: -6px;
+  color: var(--leaf);
+  transition: transform 400ms var(--ease);
+}
+
+.terra-growing__item:hover .terra-growing__pot,
+.terra-growing__item:focus-visible .terra-growing__pot {
+  transform: translateY(-6px);
+}
+
+.terra-growing__sim {
+  order: 3;
+  margin-top: 26px;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.terra-growing__turn,
+.terra-growing__value {
+  order: 4;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.terra-growing__value {
+  order: 5;
+}
+
+.terra-growing {
+  position: relative;
+}
+
+/* ---- below the shelf: tags, the ways in, and chronicle labels ------------------------ */
+
+.terra-under {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.terra-tag {
+  position: relative;
+  margin: 0;
+  padding: 5px 14px 5px 22px;
+  border-radius: 3px 12px 12px 3px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.12);
+}
+
+.terra-tag::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 12px;
+  width: 1px;
+  height: 15px;
+  background: var(--ink-soft);
+}
+
+.terra-tag__hole {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-soft);
+  transform: translateY(-50%);
+}
+
+.terra-tag__soon {
+  color: var(--ink-soft);
+}
+
+.terra-under__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.terra-under__actions .button {
+  min-height: 36px;
+  font-size: 0.9rem;
+  padding: 0.35em 0.95em;
+}
+
+.terra-under__note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.terra-labels {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Pressed-paper labels, hung on threads like seed labels in a potting shed. */
+.terra-label {
+  position: relative;
+  margin-top: 14px;
+  max-width: 200px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--oak-dark) 25%, transparent);
+  border-radius: 4px 4px 10px 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.25;
+  font-style: italic;
+  transform: rotate(var(--swing));
+  transform-origin: top center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.12);
+}
+
+.terra-label::before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  width: 1px;
+  height: 15px;
+  background: var(--ink-soft);
+}
+
+.terra-label:hover {
+  border-color: var(--accent);
+}
+
+.terra-shelf__decor {
+  position: absolute;
+  bottom: calc(100% - 4px);
+  width: clamp(56px, 5vw, 92px);
+  pointer-events: none;
+}
+
+.terra-shelf__decor--left {
+  left: clamp(4px, 1.2vw, 30px);
+}
+
+.terra-shelf__decor--right {
+  right: clamp(4px, 1.2vw, 30px);
+}
+
+.terra-decor {
+  width: 100%;
+  height: auto;
+  color: var(--leaf);
+}
+
+.terra-decor .terra-leaf,
+.terra-seedling .terra-leaf {
+  fill: color-mix(in srgb, var(--leaf) 75%, transparent);
+  stroke: color-mix(in srgb, var(--leaf) 60%, black);
+}
+
+.terra-decor .terra-bloom,
+.terra-seedling .terra-bloom {
+  fill: var(--terracotta);
+  stroke: none;
+}
+
+.terra-pot {
+  fill: var(--terracotta);
+}
+
+.terra-pot-rim {
+  fill: color-mix(in srgb, var(--terracotta) 82%, black);
+}
+
+.terra-soil {
+  fill: color-mix(in srgb, var(--oak-dark) 70%, black);
+}
+
+.terra-pot-shine {
+  fill: none;
+  stroke: rgb(255 255 255 / 0.3);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* Today's rosette, pinned to the top of the dome. */
+.terra-rosette {
+  position: absolute;
+  top: 3%;
+  left: 50%;
+  width: 34px;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.2));
+}
+
+.terra-rosette__petals,
+.terra-rosette__tail {
+  fill: var(--sim-accent);
+}
+
+.terra-rosette__heart {
+  fill: var(--surface);
+  stroke: var(--sim-accent);
+  stroke-width: 2;
+}
+
+/* ---- Terrarium skins for the pages and menus ---------------------------------- */
+
+[data-theme='terrarium'] .menu-list__item {
+  border-radius: 999px;
+  padding: 10px 18px;
+}
+
+[data-theme='terrarium'] .dialog--card .detail__demo {
+  padding: 28px 28px 0;
+}
+
+/* Library entries as plant labels, a punched hole on the left. */
+[data-theme='terrarium'] .library__card {
+  position: relative;
+  padding-left: 44px;
+  border-radius: 14px 22px 22px 14px;
+}
+
+[data-theme='terrarium'] .library__card::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--rule);
+  background: var(--bg);
+  transform: translateY(-50%);
+}
+
+[data-theme='terrarium'] .library__epithet {
+  font-family: var(--font-display);
+}
+
+[data-theme='terrarium'] .almanac-day--played {
+  background: linear-gradient(var(--accent) 0 6px, var(--surface) 6px);
+  border-radius: 12px;
+}
+
+[data-theme='terrarium'] .codex-card__art {
+  width: 84px;
+  height: 84px;
+  padding: 14px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--leaf) 18%, var(--surface));
+}
+
+.terra-tag {
+  white-space: nowrap;
+}
+
+@media (max-width: 1500px) {
+  .terra-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+  .terra-tag__soon {
+    display: none;
+  }
+}
+
+.terra-dome__plate {
+  max-width: 94%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Four domes to a shelf: the tags say less so they stay on one line. */
+.terra-shelves--crowded .terra-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.terra-shelves--crowded .terra-tag__soon {
+  display: none;
+}
+
+.terra-shelves--crowded .terra-dome__plate {
+  font-size: clamp(0.95rem, 1.05vw, 1.2rem);
+}

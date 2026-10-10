@@ -1,0 +1,44 @@
+{
+  "name": "one-more-year",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Run a small world, one year at a time: modern web simulations inspired by the turn-based classics of the BASIC era.",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @one-more-year/hall dev",
+    "build": "pnpm --filter @one-more-year/hall build",
+    "preview": "pnpm --filter @one-more-year/hall preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "tsc -p tsconfig.json && pnpm -r typecheck",
+    "e2e": "pnpm build && playwright test",
+    "shots": "pnpm build && cross-env SHOTS=1 playwright test --project=shots",
+    "check": "tsx scripts/check/index.ts",
+    "provenance": "tsx scripts/provenance-scan.ts",
+    "docs:sims": "tsx scripts/docs-sims.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "^26.6.4",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "happy-dom": "^20.14.5",
+    "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
+  }
+}

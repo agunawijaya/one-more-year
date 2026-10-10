@@ -1,0 +1,1231 @@
+/*
+ * Almanac: the book of years, open on a desk.
+ * Light: a morning study. Dark: lamplight. Colours come from tokens.ts;
+ * the cover and ribbon colours come from the Legacy cosmetic.
+ */
+
+[data-theme='almanac'] {
+  --font-display: 'EB Garamond Variable', 'EB Garamond', Garamond, Georgia, serif;
+  --font-text: 'EB Garamond Variable', 'EB Garamond', Garamond, Georgia, serif;
+  --font-ui: 'EB Garamond Variable', 'EB Garamond', Garamond, Georgia, serif;
+  --font-numbers: 'EB Garamond Variable', 'EB Garamond', Garamond, Georgia, serif;
+  /* Old-style figures that still line up in columns. */
+  --numerals: 'onum' 1, 'tnum' 1;
+  --radius: 4px;
+  --radius-small: 3px;
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35  0 0 0 0 0.27  0 0 0 0 0.16  0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+  --desk-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.09' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.19  0 0 0 0 0.09  0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23w)'/%3E%3C/svg%3E");
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1;
+}
+
+[data-theme='almanac'][data-appearance='dark'] {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.85  0 0 0 0 0.8  0 0 0 0 0.65  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+[data-theme='almanac'] body {
+  font-size: 1.125rem;
+}
+
+/* ---- chrome skin ------------------------------------------------------------- */
+
+[data-theme='almanac'] .top-bar {
+  background: color-mix(in srgb, var(--surface) 58%, var(--bg));
+  border-bottom: 1px solid var(--rule);
+  box-shadow: 0 1px 0 var(--page-edge);
+}
+
+[data-theme='almanac'] .wordmark {
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-style: italic;
+}
+
+[data-theme='almanac'] .top-bar__link,
+[data-theme='almanac'] .top-bar__theme {
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
+}
+
+[data-theme='almanac'] .top-bar__link[aria-current='page'] {
+  background: none;
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+
+[data-theme='almanac'] .top-bar__themes {
+  border-radius: 3px;
+}
+
+[data-theme='almanac'] .top-bar__themes {
+  border-color: transparent;
+}
+
+[data-theme='almanac'] .top-bar__theme[aria-pressed='true'] {
+  background: none;
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+
+[data-theme='almanac'] .top-bar__theme {
+  border-radius: 2px;
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.08em;
+  font-size: 1.05rem;
+}
+
+[data-theme='almanac'] .button {
+  border-radius: 3px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: transparent;
+  border-color: var(--ink-soft);
+}
+
+[data-theme='almanac'] .button--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+[data-theme='almanac'] .dialog,
+[data-theme='almanac'] .page {
+  background-image: var(--paper-grain);
+}
+
+[data-theme='almanac'] .dialog {
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  box-shadow:
+    0 0 0 6px var(--surface),
+    0 0 0 7px var(--rule),
+    0 30px 80px rgb(0 0 0 / 0.35);
+}
+
+[data-theme='almanac'] .page__rubric,
+[data-theme='almanac'] .chronicle__rubric,
+[data-theme='almanac'] .detail__rubric,
+[data-theme='almanac'] .legacy__rank-label,
+[data-theme='almanac'] .moment__kind,
+[data-theme='almanac'] .milestone__kind {
+  font-family: var(--font-text);
+  font-variant-caps: all-small-caps;
+  text-transform: none;
+  letter-spacing: 0.14em;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+[data-theme='almanac'] .page {
+  margin-top: 28px;
+  margin-bottom: 40px;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  box-shadow:
+    0 2px 0 var(--page-edge),
+    0 4px 0 var(--rule),
+    0 24px 60px rgb(0 0 0 / 0.18);
+}
+
+[data-theme='almanac'] .hall-main:has(.page) {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, var(--desk-light), transparent 70%),
+    var(--desk-grain), var(--bg);
+}
+
+[data-theme='almanac'] .page__title,
+[data-theme='almanac'] .chronicle__title {
+  font-weight: 500;
+}
+
+[data-theme='almanac'] .chronicle__epithet {
+  font-style: italic;
+}
+
+[data-theme='almanac'] .library__card,
+[data-theme='almanac'] .codex-card,
+[data-theme='almanac'] .moment,
+[data-theme='almanac'] .chronicle__chart,
+[data-theme='almanac'] .legacy__rank,
+[data-theme='almanac'] .legacy__streak {
+  background: transparent;
+  border-color: var(--rule);
+}
+
+[data-theme='almanac'] .chronicle__plate {
+  border: 3px double currentColor;
+}
+
+[data-theme='almanac'] .timeline__mark {
+  border-radius: 1px;
+}
+
+[data-theme='almanac'] .toast {
+  background-image: var(--paper-grain);
+  border-radius: 3px;
+}
+
+/* ---- the desk ----------------------------------------------------------------- */
+
+.almanac {
+  height: calc(100vh - var(--top-bar-height));
+  min-height: 600px;
+  position: relative;
+  overflow: hidden;
+}
+
+.almanac-desk {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 2.6vh, 36px) clamp(24px, 3vw, 72px);
+  background:
+    radial-gradient(ellipse 70% 80% at 12% -10%, var(--desk-light), transparent 62%),
+    radial-gradient(ellipse 120% 90% at 50% 120%, var(--desk-shadow), transparent 60%),
+    var(--desk-grain), var(--bg);
+}
+
+/* Morning light through a window, falling across the desk in two soft shafts. */
+.almanac-window {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent 0 18%,
+    rgb(255 250 235 / 0.22) 18% 31%,
+    transparent 31% 34%,
+    rgb(255 250 235 / 0.18) 34% 47%,
+    transparent 47%
+  );
+  filter: blur(18px);
+  mix-blend-mode: soft-light;
+}
+
+[data-appearance='dark'] .almanac-desk {
+  background:
+    radial-gradient(ellipse 58% 64% at 50% 46%, rgb(255 207 122 / 0.2), transparent 70%),
+    radial-gradient(ellipse 90% 90% at 50% 50%, transparent 40%, var(--desk-shadow) 100%),
+    var(--desk-grain), var(--bg);
+}
+
+[data-appearance='dark'] .almanac-window {
+  background: radial-gradient(ellipse 40% 30% at 50% 20%, rgb(255 207 122 / 0.12), transparent 70%);
+  mix-blend-mode: normal;
+}
+
+/* ---- the book ------------------------------------------------------------------ */
+
+.almanac-book {
+  position: relative;
+  width: min(1620px, calc(100% - 80px));
+  height: min(910px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0 minmax(0, 1fr);
+  filter: drop-shadow(0 30px 40px rgb(40 24 8 / 0.28)) drop-shadow(0 6px 10px rgb(40 24 8 / 0.18));
+}
+
+[data-appearance='dark'] .almanac-book {
+  filter: drop-shadow(0 30px 50px rgb(0 0 0 / 0.6)) drop-shadow(0 4px 8px rgb(0 0 0 / 0.5));
+}
+
+/* Lamplight: a warm pool on the open pages, fading toward the corners. */
+[data-appearance='dark'] .almanac-book::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 60% at 52% 32%, rgb(255 205 120 / 0.2), transparent 72%),
+    radial-gradient(ellipse 90% 90% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.28) 100%);
+  mix-blend-mode: screen;
+}
+
+[data-appearance='dark'] .almanac-book::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(ellipse 90% 85% at 50% 38%, transparent 58%, rgb(0 0 0 / 0.35) 100%);
+}
+
+/* The boards: the cover shows as a rim around the pages, in the cosmetic's cloth. */
+.almanac-cover {
+  position: absolute;
+  inset: -12px -14px -14px -14px;
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, transparent 49.4%, rgb(0 0 0 / 0.25) 50%, transparent 50.6%),
+    var(--cover);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
+}
+
+.almanac-page {
+  position: relative;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+  padding: clamp(24px, 4vh, 52px) clamp(28px, 3.4vw, 68px) clamp(24px, 3.6vh, 44px);
+  background-color: var(--surface);
+  background-image: var(--paper-grain);
+}
+
+.almanac-page--left {
+  border-radius: 6px 2px 2px 6px;
+  box-shadow:
+    inset -40px 0 50px -30px rgb(60 40 15 / 0.22),
+    inset 1px 0 0 var(--page-edge),
+    -3px 0 0 var(--page-edge),
+    -5px 1px 0 var(--rule),
+    -7px 2px 0 var(--gilt-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.almanac-page--right {
+  border-radius: 2px 6px 6px 2px;
+  box-shadow:
+    inset 40px 0 50px -30px rgb(60 40 15 / 0.22),
+    3px 0 0 var(--page-edge),
+    5px 1px 0 var(--rule),
+    7px 2px 0 var(--gilt-soft);
+  padding-right: clamp(44px, 4.4vw, 86px);
+}
+
+[data-appearance='dark'] .almanac-page--left {
+  box-shadow:
+    inset -40px 0 50px -30px rgb(0 0 0 / 0.45),
+    -3px 0 0 var(--page-edge),
+    -5px 1px 0 var(--rule),
+    -7px 2px 0 var(--gilt-soft);
+}
+
+[data-appearance='dark'] .almanac-page--right {
+  box-shadow:
+    inset 40px 0 50px -30px rgb(0 0 0 / 0.45),
+    3px 0 0 var(--page-edge),
+    5px 1px 0 var(--rule),
+    7px 2px 0 var(--gilt-soft);
+}
+
+/* The right page scrolls; a paper-coloured fade at its foot says it goes on. */
+.almanac-page--right::after {
+  content: '';
+  position: sticky;
+  display: block;
+  bottom: calc(-1 * clamp(24px, 3.6vh, 44px));
+  height: 64px;
+  margin: -64px 0 0;
+  background: linear-gradient(to bottom, transparent, var(--surface) 85%);
+  pointer-events: none;
+}
+
+.almanac-gutter {
+  position: relative;
+  z-index: 1;
+}
+
+.almanac-gutter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -2px;
+  width: 4px;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.22), rgb(0 0 0 / 0.08));
+}
+
+/* The almanac's own silk ribbon, hanging out of the foot of the gutter. */
+.almanac-gutter::after {
+  content: '';
+  position: absolute;
+  bottom: -46px;
+  left: 18px;
+  width: 16px;
+  height: 66px;
+  background: linear-gradient(90deg, var(--ribbon), color-mix(in srgb, var(--ribbon) 70%, black));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
+}
+
+.almanac-page--turning {
+  animation: almanac-turn 720ms var(--ease);
+  transform-origin: left center;
+}
+
+[data-motion='reduced'] .almanac-page--turning {
+  animation: almanac-fade 380ms ease;
+}
+
+@keyframes almanac-turn {
+  from {
+    transform: perspective(2400px) rotateY(-24deg);
+    opacity: 0.25;
+    filter: brightness(0.92);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@keyframes almanac-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Running heads and folios, as in any printed almanac. */
+.almanac-running {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 clamp(16px, 2.6vh, 30px);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.16em;
+  font-size: 1rem;
+}
+
+.almanac-folio {
+  font-style: italic;
+  font-variant-caps: normal;
+  letter-spacing: 0;
+}
+
+/* ---- the left page: the index ------------------------------------------------------ */
+
+.almanac-index__header {
+  margin-bottom: clamp(10px, 2vh, 22px);
+}
+
+.almanac-index__title {
+  margin: 0;
+  font-size: clamp(2rem, 2.7vw, 3.1rem);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.almanac-index__sub {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 1.12rem;
+}
+
+.almanac-index {
+  list-style: none;
+  margin: 0 0 clamp(14px, 2.4vh, 28px);
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.almanac-chapter {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.3em 58px minmax(0, 1fr);
+  gap: 0 18px;
+  align-items: start;
+  padding: clamp(8px, 1.3vh, 14px) 4px;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-text);
+  transition: background 200ms;
+}
+
+.almanac-chapter:hover {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--sim-accent) 7%, transparent),
+    transparent
+  );
+}
+
+.almanac-chapter[aria-current='true']::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--sim-accent);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.almanac-chapter__numeral {
+  padding-top: 0.25em;
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+
+.almanac-chapter__body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.almanac-chapter__line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.almanac-chapter__title {
+  font-size: clamp(1.35rem, 1.75vw, 1.85rem);
+  font-weight: 500;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.almanac-chapter__leader {
+  flex: 1;
+  min-width: 24px;
+  border-bottom: 2px dotted var(--rule);
+  transform: translateY(-5px);
+}
+
+.almanac-chapter__status {
+  font-style: italic;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  font-size: 1.02rem;
+}
+
+.almanac-chapter__status--preparing {
+  font-variant-caps: all-small-caps;
+  font-style: normal;
+  letter-spacing: 0.1em;
+}
+
+.almanac-chapter__rubric {
+  color: var(--sim-accent);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.12em;
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.almanac-chapter__tagline {
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  line-height: 1.35;
+}
+
+/* Engraved plates: a double rule, cross-hatching, the emblem in ink. */
+.almanac-plate {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 3px double var(--ink);
+  background:
+    repeating-linear-gradient(-45deg, var(--hatch) 0 1px, transparent 1px 5px), var(--surface);
+  color: var(--sim-accent, var(--ink));
+}
+
+.almanac-plate svg {
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+  background: var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--surface);
+}
+
+.almanac-plate--pencil {
+  border-style: dashed;
+  border-width: 1.5px;
+  border-color: var(--ink-soft);
+  background: var(--surface);
+  color: var(--ink-soft);
+}
+
+.almanac-plate--pencil svg path {
+  stroke-dasharray: 2.5 2;
+  opacity: 0.85;
+}
+
+/* Today's page: a dated leaf laid on the index, its corner folded. */
+.almanac-today {
+  position: relative;
+  margin: 4px 6px clamp(14px, 2vh, 24px);
+  padding: 14px 22px 12px;
+  background: color-mix(in srgb, var(--surface) 60%, var(--surface-2));
+  border: 1px solid var(--rule);
+  transform: rotate(-0.5deg);
+  box-shadow: 0 10px 22px rgb(60 40 15 / 0.14);
+  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+}
+
+[data-appearance='dark'] .almanac-today {
+  box-shadow: 0 10px 22px rgb(0 0 0 / 0.4);
+}
+
+.almanac-today__corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(225deg, transparent 50%, var(--surface-2) 50%);
+  box-shadow: -2px 2px 4px rgb(0 0 0 / 0.12);
+}
+
+.almanac-today__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-right: 24px;
+}
+
+.almanac-today__title {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.almanac-today__date {
+  margin: 0;
+  color: var(--accent);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-feature-settings: var(--numerals);
+}
+
+.almanac-today__list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.almanac-today__item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 6px 0;
+  border: 0;
+  border-top: 1px dotted var(--rule);
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-text);
+}
+
+.almanac-today__sim {
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.almanac-today__state {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.almanac-today__item:hover .almanac-today__sim {
+  color: var(--accent);
+}
+
+.almanac-today__empty {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* The page foot: year-marks for the streak, the rank on the right. */
+/* The page foot stays in view while the index scrolls above it. */
+.almanac-foot {
+  position: sticky;
+  bottom: calc(-1 * clamp(24px, 3.6vh, 44px));
+  z-index: 1;
+  margin: auto calc(-1 * clamp(28px, 3.4vw, 68px)) calc(-1 * clamp(24px, 3.6vh, 44px));
+  padding: 12px clamp(28px, 3.4vw, 68px) clamp(16px, 2.6vh, 30px);
+  background-color: var(--surface);
+  background-image: var(--paper-grain);
+  box-shadow: 0 -18px 18px -6px var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+
+.almanac-streak {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.almanac-streak__marks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+}
+
+/* Each day played is a small year-mark: a leaf of the almanac, stood on end. */
+.almanac-mark {
+  width: 12px;
+  height: 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 1px 1px 2px 2px;
+  background: linear-gradient(var(--accent) 0 5px, transparent 5px);
+}
+
+.almanac-mark--today {
+  background: transparent;
+  border: 1.5px dashed var(--ink-soft);
+}
+
+.almanac-mark--grace {
+  width: auto;
+  height: auto;
+  border: 0;
+  background: none;
+  color: var(--accent);
+}
+
+.almanac-mark--grace svg {
+  width: 20px;
+  height: 20px;
+}
+
+.almanac-mark--empty {
+  width: 40px;
+  height: 1px;
+  background: var(--rule);
+}
+
+.almanac-streak__text {
+  margin: 0;
+  font-style: italic;
+  font-feature-settings: var(--numerals);
+}
+
+.almanac-streak__volume {
+  color: var(--ink-soft);
+}
+
+.almanac-rank {
+  display: grid;
+  justify-items: end;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--font-text);
+  padding: 0;
+}
+
+.almanac-rank__title {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.almanac-rank__points {
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+}
+
+/* ---- ribbons on the book's edge ----------------------------------------------------------- */
+
+.almanac-ribbons {
+  position: absolute;
+  top: 70px;
+  right: -40px;
+  display: grid;
+  gap: 8px;
+  z-index: 2;
+}
+
+.almanac-ribbon {
+  width: 34px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 0 0 0 6px;
+  border: 0;
+  border-radius: 0 6px 6px 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sim-accent) 72%, black),
+    var(--sim-accent)
+  );
+  color: var(--surface);
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgb(0 0 0 / 0.2);
+  transition: transform 220ms var(--ease);
+}
+
+.almanac-ribbon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.almanac-ribbon[aria-current='true'] {
+  transform: translateX(8px);
+}
+
+.almanac-ribbon:hover {
+  transform: translateX(5px);
+}
+
+[data-appearance='dark'] .almanac-ribbon {
+  color: #10172b;
+}
+
+/* ---- the right page: the chosen world ------------------------------------------------------- */
+
+.almanac-spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 26px;
+  margin-bottom: 18px;
+}
+
+.almanac-engraving {
+  margin: 0;
+}
+
+.almanac-engraving__frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  padding: 10px;
+  border: 4px double var(--ink);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  overflow: hidden;
+}
+
+.almanac-engraving__frame > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.almanac-engraving__pencil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+}
+
+.almanac-engraving__pencil svg {
+  width: 40%;
+  height: 60%;
+  opacity: 0.75;
+}
+
+.almanac-engraving__pencil path {
+  stroke-dasharray: 1.6 1.4;
+  stroke-width: 1px;
+}
+
+.almanac-engraving__caption {
+  margin-top: 8px;
+  text-align: center;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  font-feature-settings: var(--numerals);
+}
+
+/* Marginal notes: each signal as a tiny chart with its figure. */
+.almanac-margin {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding-left: 16px;
+  border-left: 1px solid var(--rule);
+}
+
+.almanac-note {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 6px;
+}
+
+.almanac-note__label {
+  grid-column: 1 / -1;
+  color: var(--sim-accent);
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.almanac-note__value {
+  font-size: 1.85rem;
+  line-height: 1.05;
+  font-weight: 500;
+}
+
+.almanac-note__delta {
+  color: var(--ink-soft);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.almanac-note svg {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: auto;
+  margin-top: 4px;
+}
+
+.almanac-note__pending {
+  grid-column: 1 / -1;
+  height: 34px;
+  border-bottom: 1px dotted var(--rule);
+}
+
+.almanac-note--blank .almanac-note__value {
+  color: var(--ink-soft);
+}
+
+.almanac-page--right .detail__rubric {
+  color: var(--sim-accent);
+}
+
+.almanac-page--right .detail__title {
+  font-size: clamp(2.6rem, 3.6vw, 4rem);
+  font-weight: 500;
+  margin: 0;
+  line-height: 1;
+}
+
+.almanac-page--right .detail__tagline {
+  font-style: italic;
+  font-size: 1.25rem;
+  margin: 6px 0 10px;
+}
+
+.almanac-page--right .detail__teaser {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  hyphens: auto;
+  text-align: justify;
+}
+
+.almanac-page--right .detail__teaser::first-letter {
+  float: left;
+  margin: 0.04em 0.08em 0 0;
+  font-size: 3.6em;
+  line-height: 0.82;
+  color: var(--sim-accent);
+  font-weight: 500;
+}
+
+.almanac-page--right .detail__epithet {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 8px 0;
+  font-style: italic;
+}
+
+.almanac-page--right .detail__facts {
+  font-size: 1.02rem;
+  font-feature-settings: var(--numerals);
+}
+
+.almanac-page--right .detail__facts dt {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+}
+
+.almanac-page--right .detail__scenario,
+.almanac-page--right .detail__chronicle {
+  border-radius: 2px;
+  border-style: solid none none;
+  padding-left: 0;
+}
+
+.almanac-page--right .detail--coming-soon .detail__preparing {
+  font-size: 1.15rem;
+}
+
+@media (max-width: 1100px) {
+  .almanac {
+    height: auto;
+    overflow: visible;
+  }
+  .almanac-desk {
+    position: static;
+  }
+  .almanac-book {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .almanac-page {
+    height: auto;
+    overflow: visible;
+  }
+  .almanac-ribbons,
+  .almanac-gutter {
+    display: none;
+  }
+  .almanac-spread {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Bookmarks: runs in progress, each a ribbon slipped between the pages. */
+.almanac-bookmarks {
+  margin: 0 0 clamp(14px, 2.2vh, 24px);
+}
+
+.almanac-bookmarks__title {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.almanac-bookmarks__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.almanac-bookmarks__item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto auto 96px;
+  align-items: center;
+  gap: 14px;
+  padding: 5px 4px 5px 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.almanac-bookmarks__item:hover .almanac-bookmarks__sim {
+  color: var(--accent);
+}
+
+.almanac-bookmarks__ribbon {
+  width: 8px;
+  height: 26px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+}
+
+.almanac-bookmarks__sim {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.almanac-bookmarks__turn,
+.almanac-bookmarks__signal {
+  color: var(--ink-soft);
+  font-style: italic;
+  white-space: nowrap;
+}
+
+/* Secondary ways in read as quiet links in the margin of the page. */
+.almanac-page--right .detail__ways .button--quiet {
+  min-height: 0;
+  padding: 0.3em 0.2em;
+  border: 0;
+  font-style: italic;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 4px;
+}
+
+[data-theme='almanac'] .timeline__mark {
+  height: 26px;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+/* ---- Almanac skins for the pages and menus ----------------------------------- */
+
+/* The Library as a ledger: ruled rows, no boxes. */
+[data-theme='almanac'] .library__list {
+  gap: 0;
+  border-top: 1px solid var(--ink);
+}
+
+[data-theme='almanac'] .library__card {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 18px 8px;
+}
+
+[data-theme='almanac'] .library__card:hover {
+  background: linear-gradient(90deg, transparent, var(--surface-2), transparent);
+}
+
+[data-theme='almanac'] .library__epithet {
+  font-style: italic;
+  font-size: 1.45rem;
+}
+
+[data-theme='almanac'] .library__sim {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+[data-theme='almanac'] .strip-mark {
+  width: 8px;
+  height: 16px;
+  border-radius: 1px;
+}
+
+[data-theme='almanac'] .filter select {
+  border: 0;
+  border-bottom: 1.5px solid var(--ink-soft);
+  border-radius: 0;
+  background: transparent;
+  padding-left: 0;
+  font-family: var(--font-text);
+  font-size: 1.05rem;
+}
+
+[data-theme='almanac'] .filter > span {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.1em;
+  font-size: 0.95rem;
+}
+
+/* Codex art as engraved plates. */
+[data-theme='almanac'] .codex-card__art {
+  width: 96px;
+  height: 96px;
+  padding: 12px;
+  border: 3px double var(--ink);
+  background:
+    repeating-linear-gradient(-45deg, var(--hatch) 0 1px, transparent 1px 5px), var(--surface);
+}
+
+[data-theme='almanac'] .codex-card__art svg {
+  background: var(--surface);
+  border-radius: 50%;
+}
+
+[data-theme='almanac'] .codex-card__title {
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+[data-theme='almanac'] .codex-card__mechanism {
+  border-left-width: 2px;
+  background: transparent;
+  font-style: italic;
+}
+
+/* The pause menu as a table of contents. */
+[data-theme='almanac'] .menu-list {
+  gap: 0;
+  border-top: 1px solid var(--ink);
+}
+
+[data-theme='almanac'] .menu-list__item {
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-text);
+  font-size: 1.2rem;
+  padding: 12px 6px;
+}
+
+[data-theme='almanac'] .menu-list__item:hover {
+  background: linear-gradient(90deg, transparent, var(--surface-2), transparent);
+}
+
+[data-theme='almanac'] .menu-list__item::after {
+  content: '';
+  flex: 1;
+  margin: 0 12px;
+  border-bottom: 2px dotted var(--rule);
+  order: 1;
+  transform: translateY(4px);
+}
+
+[data-theme='almanac'] .menu-list__hint {
+  order: 2;
+}
+
+[data-theme='almanac'] .menu-list__icon {
+  display: none;
+}
+
+[data-theme='almanac'] .menu-list__label {
+  flex: none;
+}
+
+[data-theme='almanac'] .menu-list__item {
+  justify-content: flex-start;
+}
+
+[data-theme='almanac'] .settings__choice,
+[data-theme='almanac'] .cosmetic {
+  border-radius: 3px;
+}
+
+[data-theme='almanac'] .menu-list .menu-list__item .menu-list__label {
+  padding-left: 0;
+}
+
+/* With many worlds the ribbon tabs share the book's height instead of running off it. */
+.almanac-ribbons {
+  bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  align-content: start;
+}
+
+.almanac-ribbon {
+  flex: 0 1 52px;
+  min-height: 16px;
+  height: auto;
+}
+
+.almanac-ribbon svg {
+  max-height: 70%;
+}
