@@ -5,6 +5,8 @@
  * changes (and while that change animates), so off-screen it costs nothing.
  * It follows the Hall's look: a coloured diorama, an engraving or an
  * instrument's schematic, in the theme's colours and the current appearance.
+ * Where WebGL would run on the CPU it draws a flat map of the same city
+ * instead, so the Hall's home page never waits on shaders compiling.
  */
 import {
   createModelDemo,
@@ -16,6 +18,8 @@ import { Color } from 'three';
 import { carefulBot } from './engine/bots.ts';
 import { cityModel } from './engine/model.ts';
 import type { CityState } from './engine/state.ts';
+import { createCityMap, type CityMap } from './scene/city-map.ts';
+import { webglRunsOnCpu } from './scene/gpu.ts';
 import { createCityView, type CameraPose, type CityView } from './scene/view.ts';
 import { createCityWorld, type CityWorld } from './scene/world.ts';
 
@@ -72,8 +76,6 @@ function cityRenderer(): DemoRenderer<CityState> {
     },
     draw(state, previous, progress) {
       if (!world || !view) return;
-      // Without a GPU every frame is expensive: skip the year's in-between frames.
-      if (view.software && progress > 0 && progress < 1) return;
       const before = previous.year === state.year ? state : previous;
       // A year in one breath: the fields grow, then stand ripe until the next year turns.
       world.show({
@@ -98,13 +100,40 @@ function cityRenderer(): DemoRenderer<CityState> {
   };
 }
 
+/** The city as a flat map, for browsers where WebGL would run on the CPU and stall the page. */
+function mapRenderer(): DemoRenderer<CityState> {
+  let map: CityMap | null = null;
+  return {
+    mount(host, look) {
+      map = createCityMap(host, look.palette);
+    },
+    draw(state, previous, progress) {
+      const before = previous.year === state.year ? state : previous;
+      map?.draw({
+        people: Math.round(before.people + (state.people - before.people) * progress),
+        grain: Math.round(before.grain + (state.grain - before.grain) * progress),
+        acres: state.acres,
+        planted: state.last.planted,
+        season: progress,
+      });
+    },
+    setLook(look) {
+      map?.setPalette(look.palette);
+    },
+    dispose() {
+      map?.dispose();
+      map = null;
+    },
+  };
+}
+
 export function tenHarvestsDemo(host: HTMLElement, seed: number, look: DemoLook): DemoHandle {
   return createModelDemo({
     host,
     seed,
     model: cityModel,
     bot: carefulBot,
-    renderer: cityRenderer(),
+    renderer: webglRunsOnCpu() ? mapRenderer() : cityRenderer(),
     look,
     scenario: 'classic',
     pace: 3000,

@@ -195,8 +195,10 @@ flowchart LR
 `createQualityLadder` watches frame times (ignoring the 30 frames after any change, while shaders
 compile). Two seconds of frames 25 % over the 60 fps budget step down one level; eight seconds well
 under it step back up, never above the player's choice in Options. When WebGL runs on the CPU (no GPU,
-or a blocked driver) the ladder starts at Light, the canvas renders at 60 % resolution and the Hall's
-demo skips its in-between frames.
+or a blocked driver; `webglRunsOnCpu` in `src/scene/gpu.ts`) the ladder starts at Light and the
+canvas renders at 60 % resolution, and the Hall's demo draws a flat Canvas 2D map of the same city
+instead of the diorama (`src/scene/city-map.ts`): plots for the acres, filled houses for the people,
+the granary's fill for the store. It compiles nothing, so the Hall's home page never waits on it.
 
 Before the first frame, `post.warm()` compiles every shader with `compileAsync`: the scene as it draws
 into the composer's target (those variants differ from drawing to the screen) and the full-screen

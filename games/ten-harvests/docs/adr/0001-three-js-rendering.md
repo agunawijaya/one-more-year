@@ -46,8 +46,10 @@ everything else in the DOM:
   materials, the composer and its passes). It is loaded only when the world opens or its demo comes
   into view, as for every simulation.
 - A WebGL2-capable browser is required. Without a GPU the browser's software renderer still draws the
-  same pictures, slowly: the view detects it, starts at light, renders at reduced resolution, and the
-  Hall's demo draws only once a year instead of animating.
+  same pictures, slowly: the view detects it (`src/scene/gpu.ts`), starts at light and renders at
+  reduced resolution. The Hall's demo does not use WebGL there at all: it draws a flat Canvas 2D map
+  of the same city (`src/scene/city-map.ts`), because compiling the city's shaders on a CPU held the
+  Hall's home page for over a second at a time.
 - Frame rates during the cinematic were measured on an RTX 4060 at 582 / 917 / 2054 fps (high /
   balanced / light) at 1280×720 and 352 / 514 / 1468 fps at 1920×1080, with the frame cap lifted (see
   ARCHITECTURE.md). Older integrated GPUs are expected to sit on balanced or light.

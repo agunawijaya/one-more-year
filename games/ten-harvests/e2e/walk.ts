@@ -10,9 +10,12 @@ const [outDir, path = 'index.html', script = 'shot:start', size = '1280x720'] =
   process.argv.slice(2);
 if (!outDir) throw new Error('Usage: tsx e2e/walk.ts <out-dir> <path> <steps> [WxH]');
 const [width, height] = size.split('x').map(Number);
-const browser = await chromium.launch({
-  args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'],
-});
+// SOFTWARE=1 leaves out the GPU flags: WebGL then runs on the CPU, as on a CI runner.
+const browser = await chromium.launch(
+  process.env.SOFTWARE
+    ? {}
+    : { args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] },
+);
 const page = await browser.newPage({ viewport: { width: width ?? 1280, height: height ?? 720 } });
 // SEED=<n> fixes the seed of every new run, so a walk can aim at a known world.
 if (process.env.SEED) await fixSeed(page, Number(process.env.SEED));

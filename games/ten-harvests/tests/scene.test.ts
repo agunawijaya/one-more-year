@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { createQualityLadder, FRAME_BUDGET_MS } from '../src/scene/quality.ts';
 import { GRANARY_CAPACITY } from '../src/scene/granary.ts';
 import { figuresForPeople, parcelsForAcres, windowsForPeople } from '../src/scene/layout.ts';
+import { webglRunsOnCpu } from '../src/scene/gpu.ts';
 import { createCityWorld } from '../src/scene/world.ts';
 
 describe('the city shows the numbers', () => {
@@ -67,5 +68,12 @@ describe('the quality ladder', () => {
     const ladder = createQualityLadder({ ceiling: 'high' });
     for (let i = 0; i < 30; i++) ladder.frame(250);
     expect(ladder.level).toBe('high');
+  });
+});
+
+describe('the demo without a GPU', () => {
+  it('takes a browser with no WebGL2 for one that would draw on the CPU, and draws the map', () => {
+    // happy-dom has no WebGL at all: the Hall's demo must not try to compile shaders there.
+    expect(webglRunsOnCpu()).toBe(true);
   });
 });

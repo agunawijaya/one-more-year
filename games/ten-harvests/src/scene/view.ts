@@ -17,6 +17,7 @@ import {
 import { createPost, type Post } from './post.ts';
 import { createQualityLadder, PROFILES, type QualityLadder, type QualityLevel } from './quality.ts';
 import type { CityWorld } from './world.ts';
+import { isSoftwareGl } from './gpu.ts';
 
 export interface CameraPose {
   target: { x: number; y: number; z: number };
@@ -95,14 +96,6 @@ function blendPose(from: CameraPose, to: CameraPose, t: number): CameraPose {
   };
 }
 
-/** Whether the browser is drawing WebGL on the CPU (SwiftShader, llvmpipe and the like). */
-function isSoftwareRenderer(renderer: WebGLRenderer): boolean {
-  const gl = renderer.getContext();
-  const info = gl.getExtension('WEBGL_debug_renderer_info');
-  const name = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
-  return /swiftshader|llvmpipe|software|basic render/i.test(name);
-}
-
 export function createCityView(
   initialHost: HTMLElement,
   world: CityWorld,
@@ -131,7 +124,7 @@ export function createCityView(
   let host = initialHost;
   host.append(canvas);
 
-  const software = isSoftwareRenderer(renderer);
+  const software = isSoftwareGl(renderer.getContext());
   const camera = new PerspectiveCamera(30, 1, 0.5, 2400);
   const post = createPost(renderer, world.scene, camera);
   // Without a GPU, begin at the lightest level; the ladder still climbs if frames allow.
