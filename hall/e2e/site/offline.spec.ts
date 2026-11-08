@@ -66,12 +66,13 @@ test('the test-only Pond simulation is not part of the site', async ({ page }) =
   await expect(page.locator('[data-sim="pond"]')).toHaveCount(0);
 });
 
-test('a planned world cannot be opened from its address', async ({ page }) => {
+// Every world in the catalog is playable now, so the "not yet" path is checked in the harness
+// with a generated planned world (catalog.spec.ts); here the newest world opens from its address.
+test('a world opens from its address', async ({ page }) => {
   const problems = watchConsole(page);
   await returningVisitor(page);
-  await page.goto('/#/play/crown-of-florins?new=standard');
-  await expect(page.getByText('This world cannot be opened yet.')).toBeVisible();
-  await expect(page.locator('html')).toHaveAttribute('data-view', 'hall');
-  await expect(page).toHaveURL(/#\/\?sim=crown-of-florins$/);
+  await page.goto('/#/play/crown-of-florins');
+  await expect(page.locator('html')).toHaveAttribute('data-view', 'stage');
+  await expect(page.locator('.cf')).toBeVisible({ timeout: 30_000 });
   expect(problems).toEqual([]);
 });

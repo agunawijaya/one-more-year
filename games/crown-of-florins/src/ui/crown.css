@@ -1,0 +1,1484 @@
+/*
+ * Crown of Florins: the panels around the fresco.
+ *
+ * Buon fresco (light): parchment on a warm plaster wall, sepia ink,
+ * vermilion rubrics, illuminated initials in lapis and gold.
+ * Notte di candele (dark): dark vellum on a smoke-dark wall, ivory ink,
+ * gold rubrics. Every text colour here passes AA on the surface it sits on
+ * (tests/contrast.test.ts). Everything is scoped under .cf.
+ */
+
+.cf {
+  --cf-display: 'EB Garamond Variable', 'EB Garamond', 'Iowan Old Style', Georgia, serif;
+  --cf-grid-gap: 16px;
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: var(--cf-display);
+  font-size: 17px;
+  line-height: 1.35;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--cf-ink);
+  background-color: var(--cf-wall);
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgb(255 255 255 / 0.08), transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgb(0 0 0 / 0.08), transparent 60%), var(--cf-wall-texture);
+}
+
+.cf[data-appearance='light'] {
+  --cf-wall: #ccb895;
+  --cf-wall-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.16 0 0 0 0.14 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  --cf-paper: #f4e8cf;
+  --cf-paper-2: #eadab5;
+  --cf-ink: #2b1f15;
+  --cf-ink-soft: #5b4532;
+  --cf-rubric: #a12e1a;
+  --cf-gold: #84590e;
+  --cf-leaf: #d4a73c;
+  --cf-rule: #b8996b;
+  --cf-good: #2f6a3a;
+  --cf-warning: #8a4b00;
+  --cf-danger: #a12e1a;
+  --cf-lapis: #24477e;
+  --cf-lapis-ink: #f4e8cf;
+  --cf-first: #24477e;
+  --cf-bar: #c8b088;
+  --cf-bar-fill: #8a5e2c;
+  --cf-shadow: 0 1px 0 rgb(255 250 235 / 0.65) inset, 0 6px 18px rgb(60 40 20 / 0.24);
+  --cf-focus: #24477e;
+  --cf-seal: #9e2b18;
+  --cf-seal-ink: #fff6e6;
+}
+
+.cf[data-appearance='dark'] {
+  --cf-wall: #120e0b;
+  --cf-wall-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.22 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  --cf-paper: #251d16;
+  --cf-paper-2: #2f251c;
+  --cf-ink: #efe3c8;
+  --cf-ink-soft: #c8b694;
+  --cf-rubric: #e3b65c;
+  --cf-gold: #e3b65c;
+  --cf-leaf: #d8aa3a;
+  --cf-rule: #5c4832;
+  --cf-good: #a6d38f;
+  --cf-warning: #f0b45a;
+  --cf-danger: #f39478;
+  --cf-lapis: #2c4a86;
+  --cf-lapis-ink: #f4e2b8;
+  --cf-first: #a9c0f2;
+  --cf-bar: #3d3024;
+  --cf-bar-fill: #d8aa3a;
+  --cf-shadow: 0 0 0 1px rgb(227 182 92 / 0.12) inset, 0 8px 26px rgb(0 0 0 / 0.55);
+  --cf-focus: #f0c66a;
+  --cf-seal: #b8452a;
+  --cf-seal-ink: #fff3dc;
+}
+
+.cf :focus {
+  outline: none;
+}
+
+.cf :focus-visible {
+  outline: 2px solid var(--cf-focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Resets without weight, so any component's own colours and type win over them. */
+:where(.cf) :where(h1, h2, h3, p) {
+  margin: 0;
+}
+
+:where(.cf) :where(button, input, select) {
+  font: inherit;
+  color: inherit;
+}
+
+.cf .cf-num {
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+}
+
+.cf .cf-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- the year screen's grid ---------------------------------------------------- */
+
+.cf-year {
+  display: grid;
+  grid-template-rows: 70px minmax(0, 1fr) 104px;
+  gap: 14px;
+  height: 100vh;
+  padding: 0 24px 16px;
+  box-sizing: border-box;
+}
+
+.cf-year__main {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--cf-grid-gap);
+  min-height: 0;
+}
+
+.cf-year__court {
+  grid-column: 1 / span 3;
+}
+
+.cf-year__fresco {
+  grid-column: 4 / span 6;
+}
+
+.cf-year__glass {
+  grid-column: 10 / span 3;
+}
+
+/*
+ * The columns never scroll as a whole and never run under the rival bar: their cards share the
+ * height, and a card with more than fits scrolls inside itself (src/ui/scroll.ts).
+ */
+.cf-year__court,
+.cf-year__glass {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.cf-year__court > .cf-tabs {
+  flex: 0 1 auto;
+  max-height: 44%;
+}
+
+.cf-year__step {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.cf-year__step > .cf-panel {
+  flex: 1 1 auto;
+}
+
+.cf-year__preview {
+  flex: 0 0 auto;
+}
+
+.cf-year__glass > .cf-tabs {
+  flex: 1 1 auto;
+}
+
+.cf-panel,
+.cf-tabs {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cf-panel__foot {
+  flex: 0 0 auto;
+}
+
+.cf-panel__foot:empty {
+  display: none;
+}
+
+/* ---- a body that scrolls inside its card, and shows that it does ---------------------- */
+
+.cf-scroll-frame {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cf-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cf-rule) transparent;
+}
+
+.cf-scroll-frame[data-more-below] > .cf-scroll {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), transparent);
+}
+
+.cf-scroll-frame[data-more-above][data-more-below] > .cf-scroll {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 18px,
+    #000 calc(100% - 34px),
+    transparent
+  );
+}
+
+.cf-scroll-frame[data-more-above]:not([data-more-below]) > .cf-scroll {
+  mask-image: linear-gradient(to bottom, transparent, #000 18px);
+}
+
+.cf-scroll__more {
+  position: absolute;
+  right: 4px;
+  bottom: 2px;
+  padding: 1px 10px 2px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 999px;
+  background: var(--cf-paper);
+  color: var(--cf-ink-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.cf-scroll__more::after {
+  content: ' ↓';
+}
+
+.cf-scroll-frame[data-more-below] > .cf-scroll__more {
+  opacity: 1;
+}
+
+/* ---- a card of tabs: the court (ruler, realm) and the glass box (road, border, debt) ------ */
+
+.cf-tabs__list {
+  display: flex;
+  gap: 2px;
+  margin: -2px 0 10px;
+  border-bottom: 1px solid var(--cf-rule);
+}
+
+.cf-tabs__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 3px 10px 6px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--cf-ink-soft);
+  font: 600 0.95rem var(--cf-display);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.cf-tabs__tab[aria-selected='true'] {
+  border-bottom-color: var(--cf-rubric);
+  color: var(--cf-rubric);
+}
+
+.cf-tabs__label::first-letter {
+  color: var(--cf-first);
+}
+
+/* A mark on a tab that hides something the player must not miss (the border open, a debt). */
+.cf-tabs__mark {
+  display: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cf-danger);
+  box-shadow: 0 0 0 2px var(--cf-paper);
+  align-self: center;
+}
+
+.cf-tabs__tab[data-marked] > .cf-tabs__mark {
+  display: inline-block;
+}
+
+.cf-tabs__panel {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cf-tabs__panel[hidden] {
+  display: none;
+}
+
+/* ---- cards ------------------------------------------------------------------------ */
+
+.cf-card {
+  position: relative;
+  padding: 14px 16px 15px;
+  background: linear-gradient(170deg, var(--cf-paper), var(--cf-paper-2));
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  box-shadow: var(--cf-shadow);
+}
+
+.cf-card::before {
+  /* The inner rule of a ledger page. */
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 2px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/*
+ * A panel's heading: small capitals, the first letter in lapis set inline with the rest of its
+ * word. (Illuminated initials belong to the obituary and the chronicle.)
+ */
+.cf-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.07em;
+  color: var(--cf-rubric);
+}
+
+.cf-heading__words {
+  display: inline-block;
+}
+
+.cf-heading__words::first-letter {
+  color: var(--cf-first);
+  font-size: 1.12em;
+}
+
+.cf-heading__note {
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-variant-caps: normal;
+  letter-spacing: 0.02em;
+  color: var(--cf-ink-soft);
+}
+
+/* ---- step bar ----------------------------------------------------------------------- */
+
+.cf-steps {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 170px 0 4px;
+  border-bottom: 1px solid var(--cf-rule);
+}
+
+.cf-steps__year {
+  display: grid;
+  line-height: 1.1;
+  min-width: 190px;
+}
+
+.cf-steps__anno {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.cf-steps__where {
+  font-size: 0.9rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-steps__list {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  padding: 10px 12px 12px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 1.02rem;
+  color: var(--cf-ink-soft);
+  border-bottom: 3px solid transparent;
+}
+
+.cf-step__number {
+  display: inline-grid;
+  place-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cf-rubric);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cf-rubric);
+}
+
+.cf-step[aria-current='step'] {
+  color: var(--cf-ink);
+  font-weight: 600;
+  border-bottom-color: var(--cf-leaf);
+}
+
+.cf-step[aria-current='step'] .cf-step__number {
+  background: var(--cf-rubric);
+  color: var(--cf-paper);
+}
+
+.cf-step[data-done] .cf-step__number {
+  background: color-mix(in srgb, var(--cf-rubric) 16%, transparent);
+}
+
+/* Once the race is won, the step bar carries the news on a small ribbon. */
+.cf-steps__race {
+  margin: 0 0 0 auto;
+  padding: 4px 18px 5px;
+  background: linear-gradient(180deg, var(--cf-paper), var(--cf-paper-2));
+  color: var(--cf-rubric);
+  font-size: 0.92rem;
+  font-style: italic;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%, 9px 50%);
+  white-space: nowrap;
+}
+
+.cf-steps__race[hidden] {
+  display: none;
+}
+
+.cf-steps__race + .cf-seal {
+  margin-left: 14px;
+}
+
+.cf-seal {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  margin-left: auto;
+  padding: 9px 18px 9px 10px;
+  border: 1px solid color-mix(in srgb, var(--cf-seal) 70%, black);
+  border-radius: 999px;
+  background: var(--cf-seal);
+  color: var(--cf-seal-ink);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 0.25);
+}
+
+.cf-seal__wax {
+  width: 26px;
+  height: 26px;
+}
+
+.cf-seal kbd {
+  padding: 1px 6px;
+  border: 1px solid color-mix(in srgb, var(--cf-seal-ink) 50%, transparent);
+  border-radius: 4px;
+  font: 600 0.75rem var(--cf-display);
+}
+
+/* ---- the fresco -------------------------------------------------------------------- */
+
+.cf-fresco {
+  position: relative;
+  min-height: 0;
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cf-rule) 80%, black),
+    0 10px 30px rgb(0 0 0 / 0.3);
+  overflow: hidden;
+  background: #2a2017;
+}
+
+.cf-fresco canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.cf-fresco__drag {
+  position: absolute;
+  z-index: 2;
+  width: max-content;
+  display: grid;
+  grid-template-columns: 40px max-content;
+  gap: 2px 10px;
+  align-items: center;
+  padding: 9px 14px 10px 10px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  box-shadow: 0 14px 30px rgb(0 0 0 / 0.4);
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.cf-fresco__drag strong {
+  grid-column: 2;
+  font-size: 1.02rem;
+}
+
+.cf-fresco__drag-icon {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: grid;
+}
+
+.cf-fresco__drag-detail {
+  grid-column: 2;
+  font-size: 0.86rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-fresco__plot {
+  position: absolute;
+  z-index: 1;
+  border: 2.5px dashed #f6d27a;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 222 140 / 0.28),
+    rgb(255 222 140 / 0.08) 70%,
+    transparent
+  );
+  box-shadow:
+    0 0 0 2px rgb(60 30 10 / 0.55),
+    0 0 26px rgb(255 214 120 / 0.65);
+  pointer-events: none;
+}
+
+/* ---- the obituary: a page of an illuminated manuscript -------------------------------------- */
+
+.cf-obituary {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+}
+
+.cf-ms {
+  --ms-paper: #f0e1bf;
+  --ms-paper-2: #e3cd9e;
+  --ms-ink: #2b1f15;
+  --ms-rubric: #a12e1a;
+  --ms-rule: rgb(120 80 40 / 0.12);
+  /* The lettering follows the page's height, so a smaller screen keeps the whole text. */
+  --ms-size: clamp(17px, 3vh, 33px);
+  --ms-line: calc(var(--ms-size) * 1.45);
+  /* The heading's band sits inside the gilt border at every height. */
+  --ms-head: clamp(86px, 12vh, 112px);
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(90px, 9vw, 130px) minmax(0, 1fr) clamp(170px, 17vw, 260px);
+  grid-template-rows: var(--ms-head) minmax(0, 1fr) clamp(96px, 14vh, 150px);
+  width: min(1560px, 94vw);
+  height: min(990px, 94vh);
+  box-sizing: border-box;
+  padding: 0 46px 0 20px;
+  color: var(--ms-ink);
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 55%, rgb(120 80 30 / 0.22)),
+    radial-gradient(ellipse at 20% 15%, rgb(255 255 255 / 0.25), transparent 50%),
+    linear-gradient(170deg, var(--ms-paper), var(--ms-paper-2));
+  border-radius: 6px 10px 8px 12px;
+  box-shadow:
+    0 0 0 1px rgb(90 60 30 / 0.35),
+    0 24px 60px rgb(0 0 0 / 0.45);
+  font-family: var(--cf-display);
+  font-feature-settings:
+    'dlig' 1,
+    'hlig' 1;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  overflow: hidden;
+}
+
+.cf-ms[data-appearance='dark'] {
+  --ms-paper: #2c231b;
+  --ms-paper-2: #221a14;
+  --ms-ink: #efe3c8;
+  --ms-rubric: #e3b65c;
+  --ms-rule: rgb(227 182 92 / 0.08);
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 50%, rgb(0 0 0 / 0.45)),
+    radial-gradient(ellipse at 70% 85%, rgb(255 180 80 / 0.12), transparent 45%),
+    linear-gradient(170deg, var(--ms-paper), var(--ms-paper-2));
+}
+
+/* The skin itself (src/ui/vellum.ts) lies under everything written on it. */
+.cf-ms {
+  isolation: isolate;
+}
+
+.cf-ms__vellum {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* The gold of each margin painting catches the light now and then. */
+.cf-ms__glint {
+  animation: cf-ms-glint 7s ease-in-out infinite;
+}
+
+@keyframes cf-ms-glint {
+  0%,
+  55% {
+    transform: translate(-160px, -160px);
+  }
+  100% {
+    transform: translate(160px, 160px);
+  }
+}
+
+.cf[data-motion='reduced'] .cf-ms__glint {
+  animation: none;
+  transform: translate(-160px, -160px);
+}
+
+/* The page's illuminated border: a gold rule and a vermilion one, with gold bezants at the corners. */
+.cf-ms::before {
+  content: '';
+  position: absolute;
+  inset: 24px;
+  border: 2px solid #c9973f;
+  outline: 1px solid var(--ms-rubric);
+  outline-offset: 5px;
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at 0 0, #d8aa3a 0 7px, transparent 8px),
+    radial-gradient(circle at 100% 0, #d8aa3a 0 7px, transparent 8px),
+    radial-gradient(circle at 0 100%, #d8aa3a 0 7px, transparent 8px),
+    radial-gradient(circle at 100% 100%, #d8aa3a 0 7px, transparent 8px);
+  pointer-events: none;
+}
+
+.cf-ms__ruling {
+  position: absolute;
+  /* Starts where the text does, so every line of writing sits on a rule. */
+  inset: calc(var(--ms-head) + 6px) 22% 15% 11%;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0 calc(var(--ms-line) - 1px),
+    var(--ms-rule) calc(var(--ms-line) - 1px) var(--ms-line)
+  );
+  pointer-events: none;
+}
+
+.cf-ms__head {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  padding-bottom: 14px;
+  text-align: center;
+}
+
+.cf-ms__head h1 {
+  font-size: clamp(1.35rem, 3.2vh, 1.9rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ms-rubric);
+}
+
+.cf-ms__margin {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  display: flex;
+  justify-content: center;
+  padding-top: calc(var(--ms-line) * 4.8);
+  overflow: hidden;
+}
+
+.cf-ms__vine {
+  width: clamp(70px, 7vw, 110px);
+  height: auto;
+}
+
+.cf-ms__vine-stem {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--cf-vine, 0));
+}
+
+.cf-ms__vine-leaf {
+  opacity: clamp(0, calc((var(--cf-vine, 0) - var(--at)) * 9), 1);
+}
+
+.cf-ms__body {
+  position: relative;
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 0;
+  padding: 6px 40px 0 6px;
+}
+
+.cf-ms__initial {
+  float: left;
+  width: calc(var(--ms-line) * 3.6);
+  height: calc(var(--ms-line) * 3.6);
+  margin: 4px calc(var(--ms-size) * 0.8) 6px 0;
+  transform-origin: 50% 50%;
+  transform: scale(calc(0.55 + 0.45 * var(--cf-initial, 0)));
+  opacity: var(--cf-initial, 0);
+  filter: drop-shadow(0 3px 4px rgb(0 0 0 / 0.25));
+}
+
+.cf-ms__text {
+  font-size: var(--ms-size);
+  line-height: var(--ms-line);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.cf-ms__para {
+  margin: 0 0 8px;
+  text-indent: 0;
+}
+
+.cf-ms__para + .cf-ms__para::first-letter {
+  color: var(--ms-rubric);
+  font-weight: 600;
+}
+
+.cf-ms__word {
+  display: inline-block;
+  /* Wholly hidden before the quill reaches it (no stray column of ink), wholly shown after. */
+  clip-path: inset(-6px calc((1 - var(--cf-ink, 0)) * (100% + 4px) - 2px) -10px -2px);
+}
+
+.cf-ms__rubric {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ms-rubric);
+}
+
+.cf-ms__succession {
+  margin-top: 14px;
+  font-style: italic;
+  color: var(--ms-rubric);
+}
+
+.cf-ms__quill {
+  position: absolute;
+  z-index: 2;
+  margin: -82px 0 0 -8px;
+  filter: drop-shadow(2px 4px 3px rgb(0 0 0 / 0.3));
+  pointer-events: none;
+}
+
+.cf-ms__scenes {
+  grid-column: 3;
+  grid-row: 1 / span 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+}
+
+.cf-ms__scene {
+  width: clamp(100px, 20vh, 170px);
+  height: auto;
+  filter: drop-shadow(0 4px 5px rgb(0 0 0 / 0.28));
+}
+
+.cf-ms__foot {
+  grid-column: 2;
+  grid-row: 3;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  padding-bottom: 6px;
+}
+
+.cf-ms__wax {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(calc(1 - var(--cf-candle, 0) * 0.78));
+}
+
+.cf-ms__flame {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: translateY(calc(var(--cf-candle, 0) * 75px)) scale(var(--cf-flame, 1));
+  animation: cf-flicker 1.4s ease-in-out infinite alternate;
+}
+
+.cf-ms__smoke {
+  opacity: calc(1 - var(--cf-flame, 1));
+  transform: translateY(calc(var(--cf-candle, 0) * 75px));
+}
+
+/* ---- the coronation ------------------------------------------------------------------------ */
+
+.cf-coronation__stage,
+.cf-valley-page__stage {
+  position: fixed;
+  inset: 0;
+}
+
+.cf-petals {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.cf-petal {
+  transform: translate(var(--x), -40px);
+  animation: cf-petal-fall linear infinite;
+}
+
+@keyframes cf-petal-fall {
+  0% {
+    transform: translate(var(--x), -40px) rotate(var(--drift));
+  }
+  50% {
+    transform: translate(calc(var(--x) + var(--sway)), 500px) rotate(calc(var(--drift) + 120deg));
+  }
+  100% {
+    transform: translate(var(--x), 1040px) rotate(calc(var(--drift) + 240deg));
+  }
+}
+
+/* The tumble: the petal turns edge-on and over (its width squashes and flips) as it spins. */
+.cf-petal__tumble {
+  animation: cf-petal-tumble ease-in-out infinite;
+}
+
+@keyframes cf-petal-tumble {
+  0% {
+    transform: rotate(0deg) scale(1, 1);
+  }
+  25% {
+    transform: rotate(40deg) scale(0.18, 0.92);
+  }
+  50% {
+    transform: rotate(80deg) scale(-1, 1);
+  }
+  75% {
+    transform: rotate(120deg) scale(-0.18, 0.92);
+  }
+  100% {
+    transform: rotate(160deg) scale(1, 1);
+  }
+}
+
+/* Its face catches the light when it turns full to it, and goes dull edge-on. */
+.cf-petal__sheen {
+  opacity: 0.2;
+  animation: cf-petal-sheen ease-in-out infinite;
+}
+
+@keyframes cf-petal-sheen {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.12;
+  }
+}
+
+.cf[data-motion='reduced'] .cf-petal,
+.cf[data-motion='reduced'] .cf-petal__tumble,
+.cf[data-motion='reduced'] .cf-petal__sheen {
+  animation: none;
+}
+
+.cf[data-motion='reduced'] .cf-petal {
+  transform: translate(var(--x), var(--rest)) rotate(var(--drift));
+}
+
+.cf-cartouche {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 6%;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 16px 64px 18px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 0.35), transparent 70%),
+    linear-gradient(180deg, #f6ead0, #e9d6a8);
+  color: #2b1f15;
+  border: 2px solid #b8862a;
+  outline: 1px solid #7a5a1a;
+  outline-offset: 4px;
+  border-radius: 46% 46% 46% 46% / 22% 22% 22% 22%;
+  box-shadow:
+    0 0 0 7px rgb(216 170 58 / 0.55),
+    0 18px 40px rgb(0 0 0 / 0.45);
+  text-align: center;
+}
+
+.cf-cartouche__eyebrow {
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #84590e;
+}
+
+.cf-cartouche__title {
+  font-size: 3.4rem;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  color: #8e2614;
+}
+
+.cf-cartouche__line {
+  font-size: 1.12rem;
+  font-style: italic;
+  color: #4a3626;
+}
+
+/* ---- ribbons over the valley: painted scrolls with forked ends ---------------------------- */
+
+.cf-ribbon {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  padding: 4px 26px 5px;
+  transform: translate(-50%, 0);
+  background: linear-gradient(180deg, var(--cf-paper), var(--cf-paper-2));
+  color: var(--cf-ink);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 50%, 100% 100%, 0 100%, 12px 50%);
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.35));
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.cf-ribbon strong {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cf-rubric);
+}
+
+.cf-ribbon span {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--cf-ink-soft);
+}
+
+.cf-ribbon--news {
+  padding: 8px 46px 9px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 50%, 100% 100%, 0 100%, 20px 50%);
+}
+
+.cf-ribbon--news strong {
+  font-size: 1.35rem;
+}
+
+.cf-ribbon--news span {
+  font-size: 0.95rem;
+}
+
+/* The outcome of a clash, lettered in vermilion on a ribbon unrolled over the field. */
+.cf-ribbon--result {
+  padding: 9px 48px 10px;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 50%, 100% 100%, 0 100%, 22px 50%);
+  animation: cf-ribbon-unroll 0.6s ease-out both;
+}
+
+.cf-ribbon--result strong {
+  font-size: 1.4rem;
+}
+
+.cf-ribbon--result span {
+  font-size: 1rem;
+}
+
+@keyframes cf-ribbon-unroll {
+  from {
+    clip-path: polygon(50% 0, 50% 0, 50% 50%, 50% 100%, 50% 100%, 50% 50%);
+  }
+}
+
+.cf[data-motion='reduced'] .cf-ribbon--result {
+  animation: none;
+}
+
+/* ---- the court ---------------------------------------------------------------------- */
+
+.cf-ruler {
+  display: grid;
+  grid-template-columns: 132px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.cf-ruler .cf-portrait {
+  width: 132px;
+  height: auto;
+  filter: drop-shadow(0 3px 6px rgb(0 0 0 / 0.25));
+}
+
+.cf-ruler__title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cf-rubric);
+}
+
+.cf-ruler__name {
+  margin: 1px 0 6px;
+  font-size: 1.32rem;
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.cf-ruler__line {
+  font-size: 0.92rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-ruler__odds {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid var(--cf-rule);
+  font-size: 0.9rem;
+}
+
+.cf-ruler__odds strong {
+  color: var(--cf-ink);
+}
+
+.cf-ledger {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 18px;
+  margin: 0;
+}
+
+.cf-ledger div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+  border-bottom: 1px dotted color-mix(in srgb, var(--cf-rule) 80%, transparent);
+}
+
+.cf-ledger dt {
+  color: var(--cf-ink-soft);
+}
+
+.cf-ledger dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cf-ledger__wide {
+  grid-column: span 2;
+}
+
+/* ---- builders ------------------------------------------------------------------------ */
+
+.cf-build {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-build__item {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  gap: 2px 10px;
+  align-items: center;
+  padding: 7px 8px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--cf-paper) 70%, var(--cf-paper-2));
+  cursor: grab;
+}
+
+.cf-build__item[data-active] {
+  border-color: var(--cf-rubric);
+  box-shadow: 0 0 0 1px var(--cf-rubric) inset;
+}
+
+.cf-build__name {
+  font-weight: 600;
+}
+
+.cf-build__effect {
+  grid-column: 2;
+  font-size: 0.82rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-build__cost {
+  grid-row: span 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.cf-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cf-stepper button {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: var(--cf-paper-2);
+  cursor: pointer;
+}
+
+.cf-stepper output {
+  min-width: 22px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.cf-build__total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--cf-rule);
+  font-size: 0.95rem;
+}
+
+/* ---- the glass box -------------------------------------------------------------------- */
+
+.cf-road__ladder {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.cf-road__next {
+  font-size: 1.12rem;
+  font-weight: 600;
+}
+
+.cf-road__formula {
+  margin: 2px 0 8px;
+  font-size: 0.86rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-road__meter {
+  position: relative;
+  height: 10px;
+  margin: 2px 0 10px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 2px;
+  background: var(--cf-bar);
+}
+
+.cf-road__meter > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--cf-bar-fill), var(--cf-leaf));
+}
+
+.cf-pillars {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-pillar {
+  display: grid;
+  grid-template-columns: 7.2em 1fr 1.6em;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.86rem;
+}
+
+.cf-pillar__cells {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+  height: 9px;
+}
+
+.cf-pillar__cells i {
+  border-radius: 1px;
+  background: var(--cf-bar);
+}
+
+.cf-pillar__cells i[data-on] {
+  background: var(--cf-bar-fill);
+}
+
+.cf-pillar__cells i[data-gain] {
+  background: var(--cf-leaf);
+  box-shadow: 0 0 0 1px var(--cf-rubric) inset;
+}
+
+.cf-pillar__points {
+  text-align: right;
+  font-weight: 600;
+}
+
+.cf-watch {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-watch__part {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  gap: 2px 8px;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.cf-watch__mark {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+}
+
+.cf-watch__part[data-state='safe'] {
+  color: var(--cf-good);
+}
+
+.cf-watch__part[data-state='open'] {
+  color: var(--cf-danger);
+}
+
+.cf-watch__part[data-state='safe'] .cf-watch__mark {
+  background: currentColor;
+}
+
+.cf-watch__label {
+  color: var(--cf-ink);
+}
+
+.cf-watch__value {
+  font-weight: 600;
+  color: var(--cf-ink);
+}
+
+.cf-watch__detail {
+  grid-column: 2 / span 2;
+  font-size: 0.82rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-verdict {
+  margin-top: 8px;
+  padding: 6px 9px;
+  border-left: 3px solid var(--cf-good);
+  background: color-mix(in srgb, var(--cf-good) 9%, transparent);
+  font-size: 0.92rem;
+}
+
+.cf-verdict[data-state='open'] {
+  border-left-color: var(--cf-danger);
+  background: color-mix(in srgb, var(--cf-danger) 9%, transparent);
+}
+
+/* ---- rivals ----------------------------------------------------------------------------- */
+
+.cf-rivals {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-rival {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 40px 1fr 112px;
+  grid-template-rows: auto auto auto;
+  gap: 0 12px;
+  align-items: center;
+  padding: 9px 12px;
+}
+
+.cf-rival svg.cf-arms {
+  grid-row: span 3;
+}
+
+/* The winner of the race wears a crown on its card; a later crown is marked as later. */
+.cf-rival[data-crowned='first'] {
+  border-color: var(--cf-leaf);
+  box-shadow:
+    0 0 0 1px var(--cf-leaf) inset,
+    var(--cf-shadow);
+}
+
+.cf-rival__crown {
+  position: absolute;
+  top: -9px;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px 1px 4px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 999px;
+  background: var(--cf-paper);
+  color: var(--cf-gold);
+  font-size: 0.78rem;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+.cf-rival__name {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.cf-rival__title {
+  font-size: 0.82rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-rival__spark {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  min-width: 0;
+}
+
+/* The sparkline keeps to its column at every width, never over the names. */
+.cf-rival__spark > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cf-rival__name,
+.cf-rival__title {
+  min-width: 0;
+}
+
+.cf-rival__points {
+  grid-column: 3;
+  font-size: 0.8rem;
+  color: var(--cf-ink-soft);
+  text-align: right;
+}
+
+.cf-rival[data-you] {
+  border-color: var(--cf-rubric);
+}
+
+.cf-rival[data-you] .cf-rival__name::after {
+  content: ' · you';
+  font-weight: 500;
+  color: var(--cf-rubric);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cf * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.cf[data-motion='reduced'] * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.cf-portrait__flame {
+  animation: cf-flicker 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes cf-flicker {
+  0% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+
+/* ---- 1280 × 720: the fresco keeps half the width; panels tighten --------------------- */
+
+@media (max-width: 1500px) {
+  .cf {
+    font-size: 15px;
+  }
+  .cf-year {
+    grid-template-rows: 58px minmax(0, 1fr) 84px;
+    gap: 10px;
+    padding: 0 14px 10px;
+  }
+  .cf-steps {
+    gap: 8px;
+  }
+  .cf-steps__year {
+    min-width: 130px;
+  }
+  .cf-steps__anno {
+    font-size: 1.2rem;
+  }
+  .cf-step {
+    padding: 8px 6px 10px;
+    font-size: 0.92rem;
+  }
+  .cf-ruler {
+    grid-template-columns: 92px 1fr;
+  }
+  .cf-ruler .cf-portrait {
+    width: 92px;
+  }
+  .cf-rival {
+    grid-template-columns: 32px 1fr 80px;
+    padding: 6px 9px;
+  }
+}

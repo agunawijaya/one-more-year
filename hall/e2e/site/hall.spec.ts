@@ -1,9 +1,8 @@
 // The built Hall as players get it (vite preview on 5479): every theme in
 // light and dark, live theme and appearance changes, the OS colour scheme on
 // System, keyboard-only navigation to a world's detail, and browser Back.
-// The worlds here are the two in the catalog (Ten Harvests, playable, and a
-// planned one); the full turn loop is covered by the harness suite and by
-// each simulation's own suite.
+// The worlds here are the two in the catalog, both playable; the full turn
+// loop is covered by the harness suite and by each simulation's own suite.
 import { expect, test, type Page } from '@playwright/test';
 import {
   APPEARANCES,
@@ -41,9 +40,7 @@ async function openHall(page: Page): Promise<void> {
 
 for (const theme of THEMES) {
   for (const appearance of APPEARANCES) {
-    test(`${theme} in ${appearance}: both planned worlds, no errors, accessible`, async ({
-      page,
-    }) => {
+    test(`${theme} in ${appearance}: both worlds, no errors, accessible`, async ({ page }) => {
       const problems = watchConsole(page);
       await returningVisitor(page, { theme, appearance });
       await openHall(page);
@@ -111,7 +108,7 @@ for (const theme of THEMES) {
       const dialog = page.getByRole('dialog');
       await expect(dialog).toBeVisible();
       await expect(dialog).toContainText('Crown of Florins');
-      await expect(dialog).toContainText(/in preparation/i);
+      await expect(dialog.locator('[data-action="begin"]')).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(dialog).toBeHidden();
     }

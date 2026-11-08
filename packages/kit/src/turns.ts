@@ -27,7 +27,24 @@ export interface WorldSetup {
   scenario: string;
   /** Hot-seat players; 1 for solo simulations. */
   seats: number;
+  /**
+   * Choices the player made before the first turn that shape the world, such
+   * as who sits at each seat or a difficulty (see ADR-0009). They belong to
+   * the setup so a resumed run and "Replay this world" rebuild the same world.
+   */
+  options?: WorldOptions;
 }
+
+/** Anything JSON can carry; options are saved with the run and the chronicle. */
+export type OptionValue =
+  | string
+  | number
+  | boolean
+  | null
+  | readonly OptionValue[]
+  | { readonly [key: string]: OptionValue };
+
+export type WorldOptions = Readonly<Record<string, OptionValue>>;
 
 export interface PlanIssue {
   /** The plan field the issue is about, so the interface can mark that control. */

@@ -140,6 +140,7 @@ export function startPlay<State, Plan>(
         seed: randomSeed(),
         scenario: launch.scenario ?? defaultScenario,
         seats: launch.seats,
+        ...(launch.options ? { options: launch.options } : {}),
       };
     }
     // Runs only looked at (a reload in the first instant, a Begin and straight back) go now.

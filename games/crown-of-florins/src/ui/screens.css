@@ -1,0 +1,2072 @@
+/*
+ * Crown of Florins: the screens around the year (menu, court setup, the
+ * heralds' scroll, the valley, the curtain, the coronation, the dynasty)
+ * and the year screen's working parts (controls, previews, the fresco's
+ * handles). Built on the tokens in crown.css, so both appearances follow.
+ */
+
+/* ---- the stage and the layer over it ------------------------------------------------- */
+
+.cf-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cf-stage > canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.cf-layer {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  /* Screens painted on the stage itself (the season, the valley) must stay reachable beneath. */
+  pointer-events: none;
+}
+
+.cf-layer > * {
+  pointer-events: auto;
+}
+
+/* Pages longer than the screen scroll inside the game, never the Hall behind it. */
+.cf[data-screen='setup'] .cf-layer,
+.cf[data-screen='scenarios'] .cf-layer,
+.cf[data-screen='ending'] .cf-layer {
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.cf[data-screen='year'] .cf-stage,
+.cf[data-screen='setup'] .cf-stage,
+.cf[data-screen='scenarios'] .cf-stage,
+.cf[data-screen='ending'] .cf-stage,
+.cf[data-screen='obituary'] .cf-stage {
+  visibility: hidden;
+}
+
+.cf-thumb-stage {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 480px;
+  height: 300px;
+}
+
+/* ---- buttons and small parts ----------------------------------------------------------- */
+
+.cf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font: 600 1rem var(--cf-display);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.cf-button:hover {
+  border-color: var(--cf-rubric);
+}
+
+.cf-button--primary {
+  border-color: color-mix(in srgb, var(--cf-seal) 70%, black);
+  background: var(--cf-seal);
+  color: var(--cf-seal-ink);
+  box-shadow: 0 2px 0 rgb(0 0 0 / 0.25);
+}
+
+.cf-button--small {
+  min-height: 32px;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+}
+
+.cf-button kbd,
+.cf-skip kbd {
+  padding: 0 5px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font: 600 0.75rem var(--cf-display);
+  opacity: 0.85;
+}
+
+.cf-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* The way back to the game menu, under the Hall's own "Back to the Hall" at the top left. */
+.cf-back {
+  justify-self: start;
+  margin: 0 0 10px;
+  padding: 8px 14px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 999px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font: 600 0.95rem var(--cf-display);
+  cursor: pointer;
+  box-shadow: var(--cf-shadow);
+}
+
+.cf-icon-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper-2);
+  color: var(--cf-ink);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.cf-icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cf-chip {
+  padding: 4px 10px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 999px;
+  background: var(--cf-paper-2);
+  color: var(--cf-ink);
+  font: 500 0.88rem var(--cf-display);
+  cursor: pointer;
+}
+
+.cf-chip:hover {
+  border-color: var(--cf-rubric);
+}
+
+.cf-next {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--cf-paper-2) 70%, var(--cf-paper));
+  color: var(--cf-ink);
+  font: 600 0.98rem var(--cf-display);
+  text-align: right;
+  cursor: pointer;
+}
+
+.cf-next--seal {
+  border-color: color-mix(in srgb, var(--cf-seal) 70%, black);
+  background: var(--cf-seal);
+  color: var(--cf-seal-ink);
+  text-align: center;
+}
+
+.cf-skip {
+  position: absolute;
+  left: 26px;
+  bottom: 24px;
+  z-index: 4;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 14px;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-radius: 999px;
+  background: rgb(20 14 10 / 0.6);
+  color: #f6ecd6;
+  font: 600 0.95rem var(--cf-display);
+  cursor: pointer;
+}
+
+/* ---- the year screen: the court, the step panels and the glass box ---------------------- */
+
+.cf-year {
+  position: relative;
+}
+
+.cf-year__ruler .cf-ruler {
+  grid-template-columns: 104px 1fr;
+}
+
+.cf-year__ruler .cf-ruler .cf-portrait,
+.cf-year__ruler .cf-ruler > svg {
+  width: 104px;
+  height: auto;
+}
+
+.cf-omen {
+  margin-top: 6px;
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--cf-warning);
+}
+
+.cf-panel__label {
+  margin: 10px 0 4px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cf-ink-soft);
+}
+
+.cf-panel__hint {
+  margin: 8px 0 4px;
+  font-size: 0.85rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-ledger--single {
+  grid-template-columns: 1fr;
+}
+
+.cf-ledger__note {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-report__news {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border-left: 3px solid var(--cf-rubric);
+  font-style: italic;
+}
+
+.cf-issues {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+}
+
+.cf-issues li {
+  padding: 4px 8px;
+  border-left: 3px solid var(--cf-danger);
+  color: var(--cf-danger);
+}
+
+.cf-issues li[data-level='warning'] {
+  border-color: var(--cf-warning);
+  color: var(--cf-warning);
+}
+
+.cf-seal[data-blocked] {
+  opacity: 0.75;
+}
+
+/* An amount: label, a slider between −/+ buttons, a typed box, and a note. */
+.cf-amount {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.cf-amount__label {
+  font-weight: 600;
+}
+
+.cf-amount__words {
+  font-weight: 500;
+  color: var(--cf-ink-soft);
+}
+
+.cf-amount__row {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 30px 5.4em;
+  gap: 6px;
+  align-items: center;
+}
+
+.cf-amount__step {
+  height: 30px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper-2);
+  color: var(--cf-ink);
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.cf-amount__step:disabled {
+  opacity: 0.45;
+}
+
+.cf-amount__typed {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font: 600 0.95rem var(--cf-display);
+  text-align: right;
+}
+
+.cf-amount__note {
+  font-size: 0.82rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf input[type='range'] {
+  width: 100%;
+  accent-color: var(--cf-rubric);
+}
+
+.cf-gauge {
+  position: relative;
+  height: 14px;
+  margin: 2px 0 18px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 2px;
+  background: var(--cf-bar);
+}
+
+.cf-gauge__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, var(--cf-bar-fill), var(--cf-leaf));
+}
+
+/* A mark on the gauge: a rule across it, and its label just below. */
+.cf-gauge__mark {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: var(--cf-ink);
+  color: var(--cf-ink);
+  font-size: 0.72rem;
+}
+
+.cf-gauge__mark > span {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 4px;
+  white-space: nowrap;
+}
+
+/* Near the right end the word goes on the left of its line, inside the panel. */
+.cf-gauge__mark[data-end] > span {
+  left: auto;
+  right: 4px;
+}
+
+.cf-gauge__mark--plenty {
+  background: var(--cf-good);
+  color: var(--cf-good);
+}
+
+.cf-bread__share {
+  margin-bottom: 6px;
+  font-size: 0.92rem;
+}
+
+.cf-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cf-percent {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  margin-bottom: 8px;
+}
+
+.cf-percent__label {
+  font-weight: 600;
+}
+
+.cf-percent__value {
+  font-weight: 700;
+}
+
+.cf-percent__track {
+  position: relative;
+  grid-column: 1 / -1;
+}
+
+.cf-percent__mark {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--cf-ink-soft);
+  pointer-events: none;
+}
+
+.cf-percent__note {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-taxes__willing,
+.cf-taxes__justice {
+  margin: 4px 0;
+  font-size: 0.86rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-seals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.cf-seal-choice {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 6px 2px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  cursor: pointer;
+}
+
+.cf-seal-choice__wax {
+  display: grid;
+  place-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 46% 54% 50% 50%;
+  background: color-mix(in srgb, var(--cf-seal) 35%, var(--cf-paper-2));
+  color: var(--cf-ink);
+  font-weight: 700;
+}
+
+.cf-seal-choice__name {
+  font-size: 0.8rem;
+}
+
+.cf-seal-choice[aria-checked='true'] {
+  border-color: var(--cf-rubric);
+  box-shadow: 0 0 0 1px var(--cf-rubric) inset;
+}
+
+.cf-seal-choice[aria-checked='true'] .cf-seal-choice__wax {
+  background: var(--cf-seal);
+  color: var(--cf-seal-ink);
+}
+
+.cf-build__item[data-active] .cf-stepper output {
+  color: var(--cf-rubric);
+}
+
+.cf-stepper button:disabled {
+  opacity: 0.4;
+}
+
+/* The treasury, told one way: after this plan, and expected at the year's end, line by line on hover. */
+.cf-money {
+  margin-top: 8px;
+  border-top: 1px solid var(--cf-rule);
+  padding-top: 6px;
+}
+
+.cf-money__row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 2px 0;
+}
+
+.cf-money__row--expected {
+  cursor: help;
+  text-decoration: underline dotted var(--cf-rule);
+  text-underline-offset: 4px;
+}
+
+.cf-money__how {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  bottom: calc(100% + 6px);
+  width: min(320px, 90vw);
+  padding: 10px 12px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  box-shadow: var(--cf-shadow);
+  font-size: 0.88rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.cf-money__row--expected:hover > .cf-money__how,
+.cf-money__row--expected:focus-visible > .cf-money__how,
+.cf-money__row--expected:focus > .cf-money__how {
+  visibility: visible;
+  opacity: 1;
+}
+
+.cf-money__note {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-preview__treasury {
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
+
+.cf-preview__ghost {
+  margin-top: 6px;
+  font-size: 0.86rem;
+  font-style: italic;
+  color: var(--cf-ink-soft);
+}
+
+.cf-pillar {
+  position: relative;
+  border-radius: 2px;
+}
+
+.cf-pillar__rule {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: calc(100% + 4px);
+  display: none;
+  max-width: 240px;
+  padding: 6px 9px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font-size: 0.82rem;
+  box-shadow: var(--cf-shadow);
+}
+
+.cf-pillar:hover .cf-pillar__rule,
+.cf-pillar:focus-visible .cf-pillar__rule {
+  display: block;
+}
+
+.cf-debt__warn {
+  margin-top: 6px;
+  color: var(--cf-danger);
+  font-weight: 600;
+}
+
+.cf-debt__note {
+  margin-top: 6px;
+  color: var(--cf-ink-soft);
+}
+
+.cf-rival[data-hidden] {
+  opacity: 0.85;
+  font-style: italic;
+}
+
+.cf-rival[data-ended] {
+  opacity: 0.6;
+}
+
+/* ---- the fresco's handles ------------------------------------------------------------------ */
+
+.cf-fresco__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cf-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.cf-overlay > * {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.cf-overlay > *[hidden] {
+  display: none;
+}
+
+/* Each handle shows only on its step. */
+.cf-overlay .cf-sack,
+.cf-overlay .cf-target,
+.cf-overlay .cf-wall-handle,
+.cf-overlay .cf-gate,
+.cf-overlay .cf-bench,
+.cf-overlay .cf-carts,
+.cf-overlay .cf-plot {
+  display: none;
+}
+
+.cf-overlay[data-step='market'] .cf-sack:is([data-sack='sell'], [data-sack='buy']),
+.cf-overlay[data-step='market'] .cf-target:is([data-target='granary'], [data-target='stalls']),
+.cf-overlay[data-step='market'] .cf-wall-handle,
+.cf-overlay[data-step='bread'] .cf-sack:is([data-sack='give'], [data-sack='keep']),
+.cf-overlay[data-step='bread'] .cf-target:is([data-target='granary'], [data-target='piazza']),
+.cf-overlay[data-step='taxes'] .cf-gate,
+.cf-overlay[data-step='taxes'] .cf-bench,
+.cf-overlay[data-step='taxes'] .cf-carts[data-show],
+.cf-overlay[data-step='builders'] .cf-plot {
+  display: grid;
+}
+
+.cf-sack {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 4px 8px 5px;
+  border: 1px solid #7a5a3a;
+  border-radius: 6px;
+  background: rgb(244 232 207 / 0.92);
+  color: #2b1f15;
+  font: 600 0.78rem var(--cf-display);
+  cursor: grab;
+  touch-action: none;
+  box-shadow: 0 6px 14px rgb(0 0 0 / 0.35);
+}
+
+.cf-sack:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cf-sack--ghost {
+  pointer-events: none;
+  opacity: 0.85;
+  z-index: 5;
+}
+
+.cf-target {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border: 2px dashed #f6d27a;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 222 140 / 0.22), transparent);
+  pointer-events: none;
+}
+
+.cf-target span {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgb(30 20 12 / 0.72);
+  color: #f6ecd6;
+  font: 600 0.75rem var(--cf-display);
+  transform: translateY(54px);
+  white-space: nowrap;
+}
+
+.cf-target[data-hot] {
+  border-style: solid;
+  background: radial-gradient(closest-side, rgb(255 222 140 / 0.5), transparent);
+}
+
+.cf-wall-handle {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 4px 10px;
+  border: 1px solid #f6d27a;
+  border-radius: 999px;
+  background: rgb(30 20 12 / 0.75);
+  color: #f6ecd6;
+  font: 600 0.8rem var(--cf-display);
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.cf-wall-handle__grip {
+  width: 46px;
+  height: 4px;
+  border-top: 2px solid #f6d27a;
+  border-bottom: 2px solid #f6d27a;
+}
+
+.cf-gate {
+  width: 26px;
+  height: 26px;
+  border: 2px solid #f6d27a;
+  border-radius: 4px 4px 0 0;
+  background: rgb(30 20 12 / 0.6);
+}
+
+.cf-gate__queue {
+  position: absolute;
+  left: 30px;
+  top: 8px;
+  width: calc(var(--queue, 0) * 9px);
+  height: 10px;
+  background: radial-gradient(circle at 4px 5px, #f6ecd6 3px, transparent 3.5px) 0 0 / 9px 10px
+    repeat-x;
+  transition: width 0.3s ease;
+}
+
+.cf-bench {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cf-seal);
+  border: 2px solid #f6d27a;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.4);
+}
+
+.cf-bench::after {
+  content: attr(data-justice);
+  display: grid;
+  place-content: center;
+  height: 100%;
+  color: #fff6e6;
+  font: 700 1rem var(--cf-display);
+}
+
+.cf-carts {
+  width: 44px;
+  height: 20px;
+  background:
+    radial-gradient(circle at 10px 16px, #3a2614 4px, transparent 4.5px),
+    radial-gradient(circle at 34px 16px, #3a2614 4px, transparent 4.5px),
+    linear-gradient(#c99a4e, #c99a4e) 4px 2px / 36px 10px no-repeat;
+}
+
+.cf-plot {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 2.5px dashed #f6d27a;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 222 140 / 0.3),
+    rgb(255 222 140 / 0.06) 70%,
+    transparent
+  );
+  color: #fff3d6;
+  box-shadow:
+    0 0 0 2px rgb(60 30 10 / 0.55),
+    0 0 20px rgb(255 214 120 / 0.55);
+  cursor: copy;
+}
+
+.cf-plot[data-hot] {
+  border-style: solid;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.cf-plot:not([data-count='0'])::after {
+  content: attr(data-count);
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  display: grid;
+  place-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--cf-seal);
+  color: var(--cf-seal-ink);
+  font: 700 0.8rem var(--cf-display);
+}
+
+/* ---- confirm before sealing -------------------------------------------------------------------- */
+
+.cf-ask {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.45);
+}
+
+.cf-ask__card {
+  width: min(520px, 92vw);
+}
+
+.cf-ask__title {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.cf-ask__list {
+  margin: 0 0 14px;
+  padding-left: 20px;
+}
+
+.cf-ask__actions,
+.cf-scroll__actions,
+.cf-setup__actions,
+.cf-obituary__actions,
+.cf-coach__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Centred, clear of the Hall's notices at the bottom right. */
+.cf-scroll__actions,
+.cf-obituary__actions {
+  justify-content: center;
+}
+
+/* ---- cinematic captions -------------------------------------------------------------------------- */
+
+.cf-cinema {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cf-cinema .cf-skip {
+  pointer-events: auto;
+}
+
+.cf-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 15%;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 12px 54px 14px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #f6ead0, #e9d6a8);
+  color: #2b1f15;
+  border: 2px solid #b8862a;
+  border-radius: 46% / 22%;
+  box-shadow: 0 14px 30px rgb(0 0 0 / 0.4);
+  text-align: center;
+}
+
+.cf-caption__eyebrow {
+  font-size: 0.9rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #84590e;
+}
+
+.cf-caption strong {
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: #8e2614;
+}
+
+.cf-weather {
+  position: absolute;
+  inset: 0;
+}
+
+.cf-weather svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cf-weather__rain path {
+  stroke: #dfe8f2;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  opacity: calc(0.75 * (1 - var(--t, 0)));
+}
+
+.cf-weather__sun {
+  fill: none;
+  stroke: #f6c955;
+  stroke-width: 6;
+  stroke-linecap: round;
+  opacity: calc(0.9 * sin(var(--t, 0) * 3.1416));
+}
+
+.cf-weather__sun circle {
+  fill: rgb(246 201 85 / 0.35);
+}
+
+.cf-carts-run,
+.cf-rats-run {
+  position: absolute;
+  left: calc(10% + var(--t, 0) * 50%);
+  bottom: 26%;
+  opacity: clamp(0, calc((var(--t, 0) - 0.4) * 8), 1);
+}
+
+.cf-rats-run {
+  left: calc(70% - var(--t, 0) * 40%);
+  bottom: 34%;
+  opacity: clamp(0, calc((var(--t, 0) - 0.55) * 10), 1);
+}
+
+.cf[data-motion='reduced'] .cf-carts-run,
+.cf[data-motion='reduced'] .cf-rats-run {
+  display: none;
+}
+
+/* ---- the heralds' scroll -------------------------------------------------------------------------- */
+
+.cf-review {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 760px);
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  min-height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+  background: linear-gradient(
+    90deg,
+    rgb(10 6 4 / 0.55),
+    rgb(10 6 4 / 0.15) 40%,
+    rgb(10 6 4 / 0.55)
+  );
+}
+
+.cf-herald {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.45));
+}
+
+.cf-scroll {
+  position: relative;
+  display: grid;
+}
+
+.cf-scroll__roll {
+  height: 22px;
+  margin: 0 -14px;
+  border-radius: 11px;
+  background: linear-gradient(180deg, #b48a52, #e7cf9c 45%, #8a6436);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.35);
+}
+
+.cf-scroll__sheet {
+  max-height: calc(100vh - 110px);
+  overflow: auto;
+  padding: 18px 30px 20px;
+  background: linear-gradient(170deg, var(--cf-paper), var(--cf-paper-2));
+  color: var(--cf-ink);
+  scrollbar-width: thin;
+}
+
+.cf-scroll[data-animate] .cf-scroll__sheet {
+  animation: cf-unroll 0.7s ease-out both;
+  transform-origin: 50% 0;
+}
+
+@keyframes cf-unroll {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.cf-scroll__eyebrow {
+  font-size: 0.86rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cf-gold);
+}
+
+.cf-scroll__heading {
+  margin: 2px 0 10px;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--cf-rubric);
+}
+
+.cf-scroll__events {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  line-height: 1.45;
+}
+
+.cf-scroll__events li[data-severity='disaster'] {
+  color: var(--cf-danger);
+}
+
+.cf-scroll__events li[data-severity='good'] {
+  color: var(--cf-good);
+}
+
+.cf-scroll__quiet {
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.cf-scroll__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.cf-scroll__ledger {
+  margin: 0;
+}
+
+.cf-scroll__ledger div {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px dotted var(--cf-rule);
+}
+
+.cf-scroll__ledger dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.cf-scroll__sum {
+  font-weight: 700;
+  border-bottom-style: solid !important;
+}
+
+.cf-scroll__verdict {
+  margin: 16px 0 10px;
+  padding: 12px;
+  text-align: center;
+  border-top: 1px solid var(--cf-rule);
+}
+
+.cf-scroll__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.cf-scroll__gold {
+  font-size: 2.3rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(100deg, #8a5a12, #f3d27a 30%, #b8862a 50%, #f6dc8c 70%, #8a5a12);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: cf-gold 3s ease-in-out infinite;
+}
+
+.cf[data-appearance='light'] .cf-scroll__gold {
+  /* A darker leaf on parchment, so the letters keep their contrast. */
+  background-image: linear-gradient(
+    100deg,
+    #6b4209,
+    #96690f 30%,
+    #6f4a0c 50%,
+    #a0721a 70%,
+    #6b4209
+  );
+}
+
+@keyframes cf-gold {
+  0%,
+  100% {
+    background-position: 0% 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+}
+
+.cf[data-motion='reduced'] .cf-scroll__gold {
+  animation: none;
+}
+
+.cf-scroll__note,
+.cf-scroll__codex,
+.cf-scroll__ghost {
+  margin-top: 6px;
+  font-size: 0.92rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-scroll__codex {
+  color: var(--cf-lapis);
+  font-weight: 600;
+}
+
+.cf[data-appearance='dark'] .cf-scroll__codex {
+  color: #a9c4ee;
+}
+
+/* ---- the valley ------------------------------------------------------------------------------------ */
+
+.cf-valley {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cf-valley__labels {
+  position: absolute;
+  inset: 0;
+}
+
+.cf-valley__labels .cf-ribbon {
+  transform: translate(-50%, 0);
+}
+
+.cf-ribbon[data-ended] {
+  opacity: 0.6;
+}
+
+.cf-ribbon__crown {
+  font-size: 0.78rem;
+  color: var(--cf-gold);
+}
+
+/* ---- the heralds' announcement: the race to the crown is won ------------------------------ */
+
+.cf-race-won {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 50%;
+  width: min(560px, 90vw);
+  padding: 22px 30px 24px;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: auto;
+  animation: cf-race-won-in 0.5s ease-out both;
+}
+
+.cf-race-won__title {
+  margin: 4px 0 10px;
+  font-size: 1.7rem;
+  line-height: 1.15;
+  color: var(--cf-rubric);
+}
+
+.cf-race-won__text p {
+  margin: 0 0 8px;
+  color: var(--cf-ink);
+}
+
+.cf-race-won__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.cf-race-won-layer {
+  position: absolute;
+  inset: 0;
+  background: rgb(10 7 5 / 0.35);
+  pointer-events: auto;
+}
+
+@keyframes cf-race-won-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%);
+  }
+}
+
+.cf[data-motion='reduced'] .cf-race-won {
+  animation: none;
+}
+
+.cf-valley__panel {
+  position: absolute;
+  right: 24px;
+  top: 76px;
+  width: min(380px, 34vw);
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+  pointer-events: auto;
+}
+
+.cf-valley__title {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  color: var(--cf-rubric);
+}
+
+.cf-valley__road {
+  margin-bottom: 8px;
+  font-style: italic;
+  color: var(--cf-danger);
+}
+
+.cf-valley__news {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  line-height: 1.4;
+}
+
+/* The panel holds only what has happened so far; it grows downward as the news arrives. */
+.cf-valley__road:empty,
+.cf-valley__news:empty {
+  display: none;
+}
+
+/* ---- the hand-over curtain ---------------------------------------------------------------------------- */
+
+.cf-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: #2a0d0b;
+}
+
+.cf-curtain__drape {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.28) 0 18px,
+      rgb(255 255 255 / 0.05) 18px 30px,
+      rgb(0 0 0 / 0.18) 30px 46px
+    ),
+    linear-gradient(180deg, #7a1b16, #4a0e0c);
+}
+
+.cf-curtain__drape--left {
+  left: 0;
+}
+
+.cf-curtain__drape--right {
+  right: 0;
+}
+
+.cf-curtain__card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 46px 30px;
+  border: 2px solid #c9973f;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #f6ead0, #e9d6a8);
+  color: #2b1f15;
+  text-align: center;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 0.6);
+}
+
+.cf-curtain__eyebrow {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #84590e;
+}
+
+.cf-curtain__title {
+  font-size: 1.8rem;
+  color: #8e2614;
+}
+
+.cf-curtain__line {
+  max-width: 340px;
+  font-style: italic;
+}
+
+/* ---- the obituary and the coronation ---------------------------------------------------------------- */
+
+.cf-obituary {
+  position: relative;
+  z-index: 2;
+  gap: 14px;
+}
+
+.cf-obituary__actions {
+  width: min(1560px, 94vw);
+}
+
+.cf-obituary .cf-ms {
+  height: min(900px, calc(100vh - 90px));
+}
+
+.cf-coronation {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.cf-coronation__next {
+  position: absolute;
+  right: 26px;
+  bottom: 24px;
+}
+
+/* ---- the menu ------------------------------------------------------------------------------------------ */
+
+.cf-menu {
+  position: relative;
+  min-height: 100vh;
+}
+
+.cf-menu__card {
+  position: absolute;
+  left: max(24px, 5vw);
+  top: 50%;
+  width: min(440px, 90vw);
+  max-height: calc(100vh - 90px);
+  overflow: auto;
+  transform: translateY(-50%);
+  padding: 26px 28px;
+}
+
+.cf-menu__eyebrow {
+  font-size: 0.86rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cf-gold);
+}
+
+.cf-menu__title {
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--cf-rubric);
+}
+
+.cf-menu__tagline {
+  margin: 6px 0 16px;
+  font-style: italic;
+}
+
+.cf-menu__list,
+.cf-menu__small {
+  display: grid;
+  gap: 6px;
+}
+
+.cf-menu__small {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 12px;
+}
+
+.cf-menu__item {
+  display: grid;
+  gap: 1px;
+  padding: 9px 14px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cf-menu__item:hover {
+  border-color: var(--cf-rubric);
+}
+
+.cf-menu__label {
+  font-size: 1.12rem;
+  font-weight: 600;
+}
+
+.cf-menu__note {
+  font-size: 0.84rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-menu__section {
+  margin: 14px 0 6px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cf-ink-soft);
+}
+
+.cf-menu__runs {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-menu__credit {
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--cf-ink-soft);
+}
+
+/* ---- court setup and scenarios ------------------------------------------------------------------------- */
+
+.cf-setup,
+.cf-scenarios {
+  position: relative;
+  display: grid;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 72px 28px 32px;
+}
+
+.cf-setup__title {
+  font-size: 2.2rem;
+  color: var(--cf-rubric);
+}
+
+.cf-setup__twist {
+  margin: 4px 0 18px;
+  font-style: italic;
+}
+
+.cf-seats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-seat {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+}
+
+.cf-seat[data-kind='human'] {
+  border-color: var(--cf-rubric);
+}
+
+.cf-seat__arms {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+}
+
+.cf-seat__number {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cf-ink-soft);
+}
+
+.cf-seat__fields {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cf-seat .cf-field__input,
+.cf-seat .cf-toggle button {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.cf-seat__manner {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--cf-ink-soft);
+}
+
+.cf-field {
+  display: grid;
+  gap: 2px;
+}
+
+.cf-field__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cf-ink-soft);
+}
+
+.cf-field__input {
+  min-height: 34px;
+  padding: 4px 8px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font: 500 0.98rem var(--cf-display);
+}
+
+.cf-field__pair {
+  display: grid;
+  grid-template-columns: 1fr 34px;
+  gap: 6px;
+}
+
+.cf-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.cf-toggle button {
+  padding: 5px 6px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font: 500 0.88rem var(--cf-display);
+  cursor: pointer;
+}
+
+.cf-toggle button[aria-checked='true'] {
+  border-color: var(--cf-rubric);
+  background: color-mix(in srgb, var(--cf-rubric) 14%, var(--cf-paper));
+  font-weight: 700;
+}
+
+.cf-arms-edit summary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--cf-rubric);
+}
+
+.cf-arms-edit__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.cf-arms-edit__part {
+  display: grid;
+  gap: 1px;
+  font-size: 0.78rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-setup__row {
+  margin: 12px 0;
+}
+
+.cf-setup__options {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.cf-setup__options fieldset {
+  margin: 0;
+}
+
+.cf-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 6px;
+}
+
+.cf-choice {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.cf-choice span {
+  font-size: 0.84rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-choice[aria-checked='true'] {
+  border-color: var(--cf-rubric);
+  box-shadow: 0 0 0 1px var(--cf-rubric) inset;
+}
+
+.cf-choice:disabled {
+  opacity: 0.5;
+}
+
+.cf-setup__problems {
+  min-height: 1.4em;
+  color: var(--cf-danger);
+}
+
+.cf-scenarios__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.cf-scenario {
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  color: var(--cf-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.cf-scenario__demand {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cf-gold);
+}
+
+.cf-scenario__title {
+  font-size: 1.35rem;
+  color: var(--cf-rubric);
+}
+
+.cf-scenario__best {
+  font-size: 0.86rem;
+  color: var(--cf-ink-soft);
+}
+
+/* ---- the dynasty ------------------------------------------------------------------------------------------ */
+
+.cf-ending {
+  position: relative;
+  z-index: 2;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 34px 28px 28px;
+}
+
+.cf-ending__head {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.cf-ending__verdict {
+  font-size: 2.5rem;
+  color: var(--cf-rubric);
+}
+
+.cf-ending__line {
+  max-width: 760px;
+  margin: 4px auto 0;
+}
+
+.cf-ending__epithet {
+  margin-top: 8px;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--cf-gold);
+}
+
+.cf-ending__body {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: 16px;
+}
+
+.cf-tree {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 30px;
+  list-style: none;
+}
+
+.cf-tree::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--cf-leaf);
+}
+
+.cf-tree__ruler {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.cf-tree__ruler .cf-portrait {
+  width: 56px;
+  height: 70px;
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.25));
+}
+
+.cf-tree__text {
+  display: grid;
+  gap: 1px;
+}
+
+.cf-tree__medal {
+  position: absolute;
+  left: -30px;
+  top: 22px;
+  display: grid;
+  place-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--cf-leaf);
+  border-radius: 50%;
+  background: var(--cf-paper);
+  color: var(--cf-ink);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.cf-tree__ruler[data-crowned] .cf-tree__medal {
+  background: var(--cf-leaf);
+  color: #2b1f15;
+}
+
+.cf-tree__years,
+.cf-tree__note {
+  font-size: 0.86rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-race svg {
+  width: 100%;
+  height: auto;
+}
+
+.cf-race__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 0.86rem;
+}
+
+.cf-race__key i {
+  display: inline-block;
+  width: 14px;
+  height: 4px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.cf-ending__frescos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cf-ending__fresco {
+  display: grid;
+  gap: 2px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.cf-ending__fresco img {
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  object-fit: cover;
+  border: 1px solid var(--cf-rule);
+  border-radius: 2px;
+}
+
+.cf-ending__actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* ---- sheets --------------------------------------------------------------------------------------------------- */
+
+.cf-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.5);
+}
+
+.cf-sheet {
+  width: min(980px, 94vw);
+  max-height: 88vh;
+  overflow: auto;
+}
+
+.cf-sheet__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cf-sheet__title {
+  font-size: 1.5rem;
+  color: var(--cf-rubric);
+}
+
+.cf-sheet__lead {
+  margin-bottom: 10px;
+}
+
+.cf-ledger-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px 18px;
+}
+
+.cf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.cf-table caption {
+  padding-bottom: 4px;
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cf-rubric);
+}
+
+.cf-table th {
+  padding: 2px 8px 2px 0;
+  text-align: left;
+  font-weight: 500;
+  color: var(--cf-ink-soft);
+}
+
+.cf-table td {
+  padding: 2px 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.cf-table tr {
+  border-bottom: 1px dotted var(--cf-rule);
+}
+
+.cf-codex {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 12px;
+}
+
+.cf-codex__entry {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+}
+
+.cf-codex__art svg {
+  width: 56px;
+  height: 56px;
+  color: var(--cf-rubric);
+}
+
+.cf-codex__art--hidden svg {
+  color: var(--cf-rule);
+}
+
+.cf-codex__entry h3 {
+  margin-bottom: 4px;
+}
+
+.cf-codex__tendency,
+.cf-codex__locked {
+  margin-top: 4px;
+  font-size: 0.88rem;
+  color: var(--cf-ink-soft);
+}
+
+.cf-codex__rule {
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.cf-options__group {
+  margin: 0 0 12px;
+  border: 1px solid var(--cf-rule);
+  border-radius: 3px;
+}
+
+.cf-options__choices {
+  display: grid;
+  gap: 4px;
+}
+
+.cf-options__choice,
+.cf-options__toggle {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cf-options__note {
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  color: var(--cf-ink-soft);
+}
+
+/* ---- the herald's tour ---------------------------------------------------------------------------------------- */
+
+.cf-coach {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.cf-coach__ring {
+  position: absolute;
+  border: 3px solid var(--cf-leaf);
+  border-radius: 6px;
+  box-shadow: 0 0 0 9999px rgb(10 6 4 / 0.45);
+  transition: all 0.25s ease;
+}
+
+.cf-coach__card {
+  position: absolute;
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  width: 360px;
+  pointer-events: auto;
+}
+
+.cf-coach__count {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cf-ink-soft);
+}
+
+.cf-coach__title {
+  margin: 2px 0 4px;
+  font-size: 1.2rem;
+  color: var(--cf-rubric);
+}
+
+.cf-coach__text {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.cf[data-motion='reduced'] .cf-coach__ring {
+  transition: none;
+}
+
+/* ---- smaller screens: 1280 × 720 keeps the fresco at half the width --------------------------------------------- */
+
+@media (max-width: 1500px), (max-height: 820px) {
+  .cf {
+    font-size: 15px;
+  }
+
+  .cf-year {
+    grid-template-rows: 60px minmax(0, 1fr) 84px;
+    gap: 10px;
+    padding: 0 16px 10px;
+  }
+
+  .cf-year__main {
+    gap: 12px;
+  }
+
+  .cf-year__ruler .cf-ruler {
+    grid-template-columns: 76px 1fr;
+    gap: 10px;
+  }
+
+  .cf-year__ruler .cf-ruler .cf-portrait,
+  .cf-year__ruler .cf-ruler > svg {
+    width: 76px;
+  }
+
+  .cf-tabs__tab {
+    padding: 3px 6px 6px;
+    font-size: 0.84rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  /* The race ribbon keeps the city and the year; the crowned ruler's name waits for more room. */
+  .cf-steps__race {
+    padding: 4px 14px 5px;
+    font-size: 0.84rem;
+  }
+
+  .cf-steps__race-who {
+    display: none;
+  }
+
+  .cf-step {
+    gap: 5px;
+    padding: 8px 4px 10px;
+  }
+
+  .cf-ruler__name {
+    font-size: 1.12rem;
+  }
+
+  .cf-card {
+    padding: 10px 12px 11px;
+  }
+
+  .cf-steps {
+    gap: 10px;
+  }
+
+  .cf-step {
+    padding: 8px 6px 10px;
+    font-size: 0.95rem;
+  }
+
+  .cf-steps__year {
+    min-width: 150px;
+  }
+
+  .cf-steps__anno {
+    font-size: 1.25rem;
+  }
+
+  .cf-seal {
+    padding: 7px 14px 7px 8px;
+    font-size: 0.98rem;
+  }
+
+  .cf-ending__body {
+    grid-template-columns: 1fr 1.3fr;
+  }
+
+  .cf-ending__cities {
+    grid-column: 1 / -1;
+  }
+
+  .cf-ending__frescos {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

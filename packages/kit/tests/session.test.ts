@@ -224,6 +224,50 @@ describe('play session', () => {
     replay.dispose();
   });
 
+  it('keeps the setup options through a resume, the chronicle and a replay', () => {
+    const { ctx, reports, store } = testContext();
+    const options = {
+      court: [
+        { seat: 0, name: 'Ilaria' },
+        { seat: 1, rival: 'miser' },
+      ],
+      level: 3,
+    };
+    const first = startPlay(ctx, rules, {
+      kind: 'new',
+      scenario: null,
+      seats: 1,
+      seatNames: [],
+      options,
+    });
+    expect(first.engine.setup.options).toEqual(options);
+    first.commit();
+    first.dispose();
+
+    const resumed = startPlay(testContext(store).ctx, rules, {
+      kind: 'resume',
+      runId: first.runId,
+    });
+    expect(resumed.engine.setup.options).toEqual(options);
+    resumed.dispose();
+
+    const again = startPlay(ctx, rules, { kind: 'resume', runId: first.runId });
+    playToEnd(again);
+    const chronicle = reports[0]?.chronicle;
+    if (!chronicle) throw new Error('no chronicle');
+    expect(chronicle.setup.options).toEqual(options);
+    const replay = startPlay(ctx, rules, { kind: 'replay', chronicle });
+    expect(replay.engine.setup.options).toEqual(options);
+    replay.dispose();
+  });
+
+  it('leaves the options out when a launch has none', () => {
+    const { ctx } = testContext();
+    const session = startPlay(ctx, rules, { kind: 'new', scenario: null, seats: 1, seatNames: [] });
+    expect('options' in session.engine.setup).toBe(false);
+    session.dispose();
+  });
+
   it('records codex sightings and their milestones', () => {
     const { ctx, turns } = testContext();
     // The daily world has a fixed seed, so this run's pests are known in advance.

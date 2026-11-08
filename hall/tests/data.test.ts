@@ -90,13 +90,15 @@ describe('registry', () => {
     });
     expect(CROWN_OF_FLORINS).toMatchObject({
       title: 'Crown of Florins',
+      status: 'playable',
       players: '1–6P',
       inspiredBy: { originalTitle: 'Santa Paravia and Fiumaccio' },
     });
     expect(TEN_HARVESTS.signals.map((signal) => signal.id)).toEqual(['people', 'grain', 'acres']);
     expect(CROWN_OF_FLORINS.signals.map((signal) => signal.id)).toEqual([
+      'points',
       'treasury',
-      'people',
+      'population',
       'land',
     ]);
   });

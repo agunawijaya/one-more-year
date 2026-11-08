@@ -1,6 +1,7 @@
 // The Hall with a real played history (Pond, through the harness): every
-// theme with twenty worlds in the catalog, and axe on the chronicle page and
-// the Library, Codex and Legacy pages once they have something to show.
+// theme with twenty worlds in the catalog, a planned world turning a visitor
+// back, and axe on the chronicle page and the Library, Codex and Legacy pages
+// once they have something to show.
 import { expect, test } from '@playwright/test';
 import {
   APPEARANCES,
@@ -39,6 +40,17 @@ for (const theme of THEMES) {
     expect(problems).toEqual([]);
   });
 }
+
+// Every world of the real catalog is playable, so a generated planned one stands in.
+test('a planned world cannot be opened from its address', async ({ page }) => {
+  const problems = watchConsole(page);
+  await returningVisitor(page);
+  await openHarness(page, '#/play/fixture-1?new=standard', 'fixtures=3');
+  await expect(page.getByText('This world cannot be opened yet.')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-view', 'hall');
+  await expect(page).toHaveURL(/#\/\?sim=fixture-1$/);
+  expect(problems).toEqual([]);
+});
 
 test('the chronicle page and the Hall pages with history are accessible in every look', async ({
   page,

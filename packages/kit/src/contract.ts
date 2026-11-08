@@ -23,7 +23,7 @@ import type { RunStore } from './runs.ts';
 import type { HandoverOptions, Seats } from './seats.ts';
 import type { Appearance, ResolvedSettings, SimSettings } from './settings.ts';
 import type { NumberStyle, Unit } from './format.ts';
-import type { Signals, TurnRecord } from './turns.ts';
+import type { Signals, TurnRecord, WorldOptions } from './turns.ts';
 
 export type SimStatus = 'playable' | 'coming-soon';
 export type Domain = 'governance' | 'economy' | 'ecology' | 'society' | 'journey' | 'physics';
@@ -91,7 +91,14 @@ export interface SimManifest {
 /** What a run is opened for. */
 export type Launch =
   | { kind: 'menu' }
-  | { kind: 'new'; scenario: string | null; seats: number; seatNames: readonly string[] }
+  | {
+      kind: 'new';
+      scenario: string | null;
+      seats: number;
+      seatNames: readonly string[];
+      /** The simulation's own setup choices, carried into WorldSetup.options (ADR-0009). */
+      options?: WorldOptions;
+    }
   | { kind: 'resume'; runId: string }
   | { kind: 'daily' }
   | { kind: 'replay'; chronicle: ChronicleEntry };
